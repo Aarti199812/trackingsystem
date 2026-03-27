@@ -29,4 +29,18 @@ button:hover{
   border-radius: 10px;
   background-color: #f8f9fa;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}.nav-tabs {
+  margin-bottom: 20px;
+}
+.nav-tabs button {
+  padding: 10px 20px;
+  cursor: pointer;
+  border: none;
+  background:#e4d8d8;
+  margin: 0 5px;
+}
+.nav-tabs button.active {
+  background:#8f6363;
+  color: white;
+  font-weight: bold;
 }

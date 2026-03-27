@@ -28,6 +28,19 @@ public class Parcel {
     private String destinationAddress;
     private double weight;
     private String status;
+    private String vehicleType; 
+    private double totalPrice;  
+    
+private double pickupLat;
+private double pickupLng;
+private double dropLat;
+private double dropLng;
+
+private double distanceKm; 
+
+
+private String senderPhone;
+private String recipientPhone;
     
     @Column(name= "created_at", updatable = false)
     private LocalDateTime createdAt= LocalDateTime.now();
@@ -37,4 +50,3 @@ public class Parcel {
         createdAt = LocalDateTime.now();
     }
 }
-
