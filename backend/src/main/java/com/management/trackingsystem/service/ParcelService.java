@@ -1,5 +1,6 @@
 package com.management.trackingsystem.service;
 
+import java.util.List;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -54,5 +55,18 @@ public class ParcelService {
     public Parcel getParcelByTrackingId(String trackingId) {
         return parcelRepository.findByTrackingId(trackingId)
                 .orElseThrow(() -> new RuntimeException("Parcel not found with tracking ID: " + trackingId));
+    }
+
+    public List<Parcel> getAllParcels(){
+        return parcelRepository.findAll();
+    }
+
+    public Parcel updateParcelStatus(String trackingId, String newStatus){
+        Parcel parcel = parcelRepository.findByTrackingId(trackingId).orElseThrow(
+                ()-> new RuntimeException("Parcel not found")
+        );
+        parcel.setStatus(newStatus);
+
+        return parcelRepository.save(parcel);
     }
 }
