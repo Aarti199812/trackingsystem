@@ -1,73 +1,100 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import './TrackingSection.css';
 
 const TrackingSection = () => {
-  const [trackingId, setTrackingId] = useState('');
-  const [parcel, setParcel] = useState(null);
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
+    const [trackingId, setTrackingId] = useState('');
+    const [parcel, setParcel] = useState(null);
+    const [error, setError] = useState(null);
+    const [loading, setLoading] = useState(false);
 
-  const handleTrack = async () => {
-    if (!trackingId) {
-      setError("Please enter a tracking ID");
-      return;
-    }
+    const handleTrack = async (e) => {
+        if (e) e.preventDefault(); // Form submit refresh rokne ke liye
+        
+        if (!trackingId) {
+            setError("Please enter a valid Tracking ID");
+            return;
+        }
 
-    setLoading(true);
-    setError(null);
-
-    try {
-      const cleanId = trackingId.trim().toUpperCase();
-      const response = await axios.get(`http://localhost:9023/api/parcels/track/${cleanId}`);
-      
-      if (response.data) {
-        setParcel(response.data);
-      } else {
-        setError('No data found for this ID');
+        setLoading(true);
+        setError(null);
         setParcel(null);
-      }
-    } catch (err) {
-      setError('Parcel not found. Please check the ID');
-      setParcel(null);
-    } finally {
-      setLoading(false);
-    }
-  };
 
-  return (
-    <div className="tracking-section">
-      <div className="search-box">
-        <input
-          type="text"
-          placeholder="Enter tracking number (e.g. PRT-123)"
-          value={trackingId}
-          onChange={(e) => setTrackingId(e.target.value)}
-        />
-        <button onClick={handleTrack} disabled={loading}>
-          {loading ? 'Searching...' : 'Track Now'}
-        </button>
-      </div>
+        try {
+            const cleanId = trackingId.trim().toUpperCase();
+            const response = await axios.get(`http://localhost:9023/api/parcels/track/${cleanId}`);
+            
+            if (response.data) {
+                setParcel(response.data);
+            } else {
+                setError('No parcel found with this ID.');
+            }
+        } catch (err) {
+            setError('Invalid Tracking ID. Please try again.');
+        } finally {
+            setLoading(false);
+        }
+    };
 
-      {error && <p className="error-message" style={{ color: 'red', marginTop: '10px' }}>{error}</p>}
+    return (
+        <div className="tracking-container">
+            <div className="tracking-search-card">
+                <h2>🔍 Track Your Shipment</h2>
+                <p>Enter your tracking number to get real-time updates.</p>
+                
+                <form onSubmit={handleTrack} className="search-box">
+                    <input
+                        type="text"
+                        placeholder="e.g. PRT-XXXXXX"
+                        value={trackingId}
+                        onChange={(e) => setTrackingId(e.target.value)}
+                    />
+                    <button type="submit" disabled={loading}>
+                        {loading ? 'Searching...' : 'Track Now'}
+                    </button>
+                </form>
+                {error && <p className="error-text">{error}</p>}
+            </div>
 
-      {parcel && (
-        <div className="result-card" style={{ marginTop: '20px', border: '1px solid #ddd', padding: '15px' }}>
-          <h2>Order Details</h2>
-          <div className="info-grid">
-            <p><strong>Tracking ID:</strong> {parcel.trackingId}</p>
-            <p><strong>Status:</strong> <span className="status-tag">{parcel.status}</span></p>
-            <p><strong>Vehicle:</strong> {parcel.vehicleType}</p>
-            <p><strong>Total Price:</strong> ₹{parcel.totalPrice}</p>
-            <hr />
-            <p><strong>From:</strong> {parcel.sourceAddress}</p>
-            <p><strong>To:</strong> {parcel.destinationAddress}</p>
-            <p><strong>Distance:</strong> {parcel.distanceKm} km</p>
-            <p><strong>Sender:</strong> {parcel.senderName}</p>
-          </div>
+            {parcel && (
+                <div className="status-card">
+                    <div className="status-header">
+                        <h3>Order Details</h3>
+                        <span className={`status-badge ${parcel.status.toLowerCase().replace(' ', '-')}`}>
+                            {parcel.status}
+                        </span>
+                    </div>
+                    
+                    <div className="status-grid">
+                        <div className="info-item">
+                            <label>Tracking ID</label>
+                            <span>{parcel.trackingId}</span>
+                        </div>
+                        <div className="info-item">
+                            <label>Customer Name</label>
+                            <span>{parcel.senderName}</span>
+                        </div>
+                        <div className="info-item">
+                            <label>From</label>
+                            <span>{parcel.sourceAddress}</span>
+                        </div>
+                        <div className="info-item">
+                            <label>To</label>
+                            <span>{parcel.destinationAddress}</span>
+                        </div>
+                        <div className="info-item">
+                            <label>Vehicle</label>
+                            <span>{parcel.vehicleType}</span>
+                        </div>
+                        <div className="info-item">
+                            <label>Total Price</label>
+                            <span>₹{parcel.totalPrice}</span>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
-      )}
-    </div>
-  );
+    );
 };
 
 export default TrackingSection;
