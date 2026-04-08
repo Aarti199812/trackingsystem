@@ -57,11 +57,11 @@ const Home = () => {
                             </div>
                             <div className="arrow-btn">→</div>
                         </div>
+
                     </div>
                 </div>
             </div>
         </div>
     );
 };
-
 export default Home;

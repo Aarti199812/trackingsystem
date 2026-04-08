@@ -1,11 +1,15 @@
 package com.management.trackingsystem.service;
 
-import java.util.List;
-import java.util.UUID;
+import com.management.trackingsystem.dto.ParcelRequest;
+import com.management.trackingsystem.model.Parcel;
+import com.management.trackingsystem.model.User;
+import com.management.trackingsystem.repository.ParcelRepository;
+import com.management.trackingsystem.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.management.trackingsystem.model.Parcel;
-import com.management.trackingsystem.repository.ParcelRepository;
+
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class ParcelService {
@@ -13,59 +17,65 @@ public class ParcelService {
     @Autowired
     private ParcelRepository parcelRepository;
 
-    public Parcel bookParcel(Parcel parcel) {
-        // 1. Porter-style Tracking ID (Same as your logic, just making it look official)
+    @Autowired
+    private UserRepository userRepository;
+
+    public Parcel bookParcel(ParcelRequest request) {
+
+        if (request == null) {
+            throw new RuntimeException("Invalid request");
+        }
+
+        if (request.getUserId() == null) {
+            throw new RuntimeException("UserId is missing");
+        }
+
+        Optional<User> userOptional = userRepository.findById(request.getUserId());
+
+        if (userOptional.isEmpty()) {
+            throw new RuntimeException("User not found");
+        }
+
+        User user = userOptional.get();
+
+        Parcel parcel = new Parcel();
+
+        parcel.setSenderName(request.getSenderName());
+        parcel.setRecipientName(request.getRecipientName());
+        parcel.setSenderPhone(request.getSenderPhone());
+        parcel.setSourceAddress(request.getSourceAddress());
+        parcel.setDestinationAddress(request.getDestinationAddress());
+        parcel.setWeight(request.getWeight());
+        parcel.setDistanceKm(request.getDistanceKm());
+
+        String vehicleType = request.getVehicleType();
+        if (vehicleType != null) {
+            vehicleType = vehicleType.toLowerCase().trim();
+        } else {
+            vehicleType = "";
+        }
+
+        parcel.setVehicleType(vehicleType);
+
         String trackingId = "PRT-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
         parcel.setTrackingId(trackingId);
 
-        // 2. PRICING LOGIC (Asli Porter Touch)
-        double baseFare = 40.0; // Minimum charges
-        double perKmRate = 0.0;
+        double baseFare = 40.0;
+        double perKmRate;
 
-        // Check null to avoid errors
-        String vehicle = (parcel.getVehicleType() != null) ? parcel.getVehicleType().toLowerCase() : "bike";
-
-        // Rates define karein
-        switch (vehicle) {
-            case "bike":
-                perKmRate = 10.0;
-                break;
-            case "tata ace":
-                perKmRate = 25.0;
-                break;
-            case "pickup 8ft":
-                perKmRate = 45.0;
-                break;
-            default:
-                perKmRate = 12.0; // Default bike/scooter rate
+        switch (vehicleType) {
+            case "bike" -> perKmRate = 10.0;
+            case "tata ace" -> perKmRate = 25.0;
+            case "pickup 8ft" -> perKmRate = 45.0;
+            default -> perKmRate = 12.0;
         }
 
-        // Formula: Base Fare + (Distance * Rate)
         double total = baseFare + (parcel.getDistanceKm() * perKmRate);
-        
-        // Final Price set karein (2 decimal points tak round karke)
         parcel.setTotalPrice(Math.round(total * 100.0) / 100.0);
 
-        // 3. Initial Status
         parcel.setStatus("SEARCHING_DRIVER");
 
-        return parcelRepository.save(parcel);
-    }
-
-    public Parcel getParcelByTrackingId(String trackingId) {
-        return parcelRepository.findByTrackingId(trackingId)
-                .orElseThrow(() -> new RuntimeException("Parcel not found with tracking ID: " + trackingId));
-    }
-
-    public List<Parcel> getAllParcels(){
-        return parcelRepository.findAll();
-    }
-
-    public Parcel updateParcelStatus(String trackingId, String newStatus){
-        Parcel parcel = parcelRepository.findByTrackingId(trackingId).orElseThrow(
-                ()-> new RuntimeException("Parcel not found")
-        );
-        parcel.setStatus(newStatus);
+        parcel.setUser(user);
 
         return parcelRepository.save(parcel);
     }
