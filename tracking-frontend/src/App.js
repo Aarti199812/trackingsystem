@@ -1,6 +1,7 @@
 import React from 'react';
+import { BrowserRouter as Router } from 'react-router-dom';
 import Navbar from './components/Layout/Navbar/Navbar.jsx';
-import Home from './pages/Home/Home.jsx';
+// import Home from './pages/Home/Home.jsx';
 import AppRoutes from './routes/AppRoutes'; 
 import './App.css';
 
@@ -9,9 +10,8 @@ function App() {
     <div className="App">
       
       <Navbar />
-      <Home />
       <header className="app-header">
-        <h1>SafeParcel Management System</h1>
+        <h1 style={{textAlign: 'center',margin: '20px'}}>SafeParcel Management System</h1>
       </header>
 
       

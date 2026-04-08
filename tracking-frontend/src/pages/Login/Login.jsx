@@ -22,14 +22,13 @@ const Login = () => {
 
             const user = response.data;
 
-            // ✅ store user safely
             localStorage.setItem('user', JSON.stringify(user));
 
-            // ✅ role check
+    
             if (user.role === 'admin') {
                 navigate('/admin-dashboard');
             } else {
-                navigate('/user-dashboard');
+                navigate('/dashboard');
             }
 
         } catch (error) {
