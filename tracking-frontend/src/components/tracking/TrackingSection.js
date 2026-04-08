@@ -48,7 +48,29 @@ const TrackingSection = () => {
         </button>
       </div>
 
+<<<<<<< Updated upstream
       {error && <p className="error-message" style={{ color: 'red', marginTop: '10px' }}>{error}</p>}
+=======
+    return (
+        <div className="tracking-container" >
+            <div className="tracking-search-card">
+                <h2>🔍 Track Your Shipment</h2>
+                <p>Enter your tracking number to get real-time updates.</p>
+                
+                <form onSubmit={handleTrack} className="search-box">
+                    <input
+                        type="text"
+                        placeholder="e.g. PRT-XXXXXX"
+                        value={trackingId}
+                        onChange={(e) => setTrackingId(e.target.value)}
+                    />
+                    <button type="submit" disabled={loading}>
+                        {loading ? 'Searching...' : 'Track Now'}
+                    </button>
+                </form>
+                {error && <p className="error-text">{error}</p>}
+            </div>
+>>>>>>> Stashed changes
 
       {parcel && (
         <div className="result-card" style={{ marginTop: '20px', border: '1px solid #ddd', padding: '15px' }}>
