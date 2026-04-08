@@ -8,11 +8,22 @@ import com.management.trackingsystem.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 @Service
 public class ParcelService {
+    public List<Parcel> getAllParcels() {
+        return parcelRepository.findAll();
+    }
+
+        public void updateParcelStatus(long id, String status) {
+            Parcel parcel = parcelRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Parcel not found"));
+            parcel.setStatus(status);
+            parcelRepository.save(parcel);
+        }
 
     @Autowired
     private ParcelRepository parcelRepository;
