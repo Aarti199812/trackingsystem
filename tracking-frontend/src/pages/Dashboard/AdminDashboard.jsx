@@ -1,14 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Users, Package, DollarSign, Settings } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { Users, Package, DollarSign, Settings,LogOut } from 'lucide-react';
 import './AdminDashboard.css';
 
 const AdminDashboard = () => {
     const [allBookings, setAllBookings] = useState([]);
     const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
 
     useEffect(() => {
-        fetchAdminData();
+        const loggedInUser = JSON.parse(localStorage.getItem('user'));
+        if (!loggedInUser || loggedInUser.role !== 'ADMIN') {
+            alert("Access Denied. Admins Only.");
+            navigate('/login');
+        }
+        else  {
+            fetchAdminData();
+        }
     }, []);
 
     const fetchAdminData = async () => {
@@ -33,7 +42,11 @@ const AdminDashboard = () => {
         }
     };
 
-    const totalRevenue = allBookings.reduce((acc, curr) => acc + (curr.price || 0), 0);
+        const totalRevenue = allBookings.reduce((acc, curr) => {
+        const p = curr.totalPrice || curr.total_price||curr.price ||0;
+        return acc + Number(p);
+    }, 0);
+
 
     return (
         <div className="admin-container">
@@ -44,6 +57,14 @@ const AdminDashboard = () => {
                     <div className="nav-item"><Users /> Users</div>
                     <div className="nav-item"><Settings /> Settings</div>
                 </nav>
+                <div className='nav-item' style={{marginTop:'auto',color:'#e74c3c',cursor:'pointer',padding:'10px 20px'}}
+                    onClick={() => {
+                        localStorage.clear();
+                        window.location.href = '/';
+                    }}
+                >
+                    <LogOut size={20}/><span style={{marginLeft:'10px'}} >Logout</span>
+                </div>
             </aside>
 
             <main className="admin-main">
@@ -59,7 +80,10 @@ const AdminDashboard = () => {
                     </div>
                     <div className="a-stat-card">
                         <DollarSign color="#b8860b" />
-                        <div><h3>₹{totalRevenue}</h3><p>Total Revenue</p></div>
+                        <div className='stat-info'>
+                            <h3>₹{totalRevenue}</h3>
+                            <p>Total Revenue</p>
+                        </div>
                     </div>
                 </div>
 
