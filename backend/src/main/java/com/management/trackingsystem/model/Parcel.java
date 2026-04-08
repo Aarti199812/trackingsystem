@@ -1,12 +1,8 @@
 package com.management.trackingsystem.model;
 
 import java.time.LocalDateTime;
-
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+import lombok.*;
 
 @Entity
 @Table(name = "parcels")
@@ -32,15 +28,14 @@ public class Parcel {
     private String vehicleType;
     private double totalPrice;
 
-    private double pickupLat;
-    private double pickupLng;
-    private double dropLat;
-    private double dropLng;
-
     private double distanceKm;
 
     private String senderPhone;
     private String recipientPhone;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
