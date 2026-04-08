@@ -15,7 +15,8 @@ const BookingForm = () => {
         destinationAddress: '',
         vehicleType: 'bike',
         weight: '',
-        distanceKm: ''
+        distanceKm: '',
+        status: 'PENDING'
     });
 
     const vehicleOptions = [

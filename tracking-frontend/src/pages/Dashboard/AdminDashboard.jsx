@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { Users, Package, DollarSign, Settings,LogOut } from 'lucide-react';
 import './AdminDashboard.css';
+import BookingForm from '../../components/booking/BookingForm';
 
 const AdminDashboard = () => {
     const [allBookings, setAllBookings] = useState([]);
@@ -34,9 +35,13 @@ const AdminDashboard = () => {
 
     const updateStatus = async (id, newStatus) => {
         try {
-            await axios.put(`http://localhost:9023/api/parcels/update-status/${id}`, { status: newStatus });
+            console.log(`Updating ID ${id}`);
+            await axios.put(`http://localhost:9023/api/parcels/update-status/${id}`, {
+                     status: newStatus
+                });
+
             alert("Status Updated Successfully!");
-            fetchAdminData(); // Refresh list
+            fetchAdminData(); 
         } catch (err) {
             alert("Error updating status");
         }
@@ -100,21 +105,33 @@ const AdminDashboard = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {allBookings.map((b) => (
-                                <tr key={b.trackingId}>
-                                    <td>{b.senderName}</td>
-                                    <td>{b.sourceAddress} → {b.destinationAddress}</td>
-                                    <td className="capitalize">{b.vehicleType}</td>
-                                    <td><span className={`a-badge ${b.status?.toLowerCase()}`}>{b.status}</span></td>
+                            {allBookings.map((booking) => (
+                                <tr key={booking.id}>
+                                    <td>{booking.id}</td>
+                                    <td>{booking.trackingId}</td>
+                                    <td>{booking.senderName}</td>
+                                    <td>{booking.sourceAddress} + {booking.destinationAddress}</td>
+                                    <td className="capitalize">{booking.vehicleType}</td>
                                     <td>
+                                        <span className={`a-badge ${booking.status?.toLowerCase()}`}>
+                                            {booking.status}
+                                            </span>
+                                            </td>
+                                        <td>
                                         <select 
-                                            onChange={(e) => updateStatus(b.trackingId, e.target.value)}
-                                            defaultValue={b.status}
                                             className="status-select"
+                                            value={booking.status}
+                                            onChange={(e) => updateStatus(booking.id, e.target.value)}
+                                            style={{
+                                                padding:'5px',
+                                                borderRadius:'5px',
+                                                backgroundColor:booking.status==='DELIVERED'?'#d4edda':'fff3cd'
+                                            }}
                                         >
                                             <option value="PENDING">Pending</option>
                                             <option value="IN_TRANSIT">In Transit</option>
                                             <option value="DELIVERED">Delivered</option>
+                                            <option value="CANCELLED">Cancelled</option>
                                         </select>
                                     </td>
                                 </tr>

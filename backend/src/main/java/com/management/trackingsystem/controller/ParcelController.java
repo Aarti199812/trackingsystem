@@ -41,14 +41,10 @@ public class ParcelController {
     }
 
     @PutMapping("/update-status/{id}")
-    public ResponseEntity<String> updateStatus(@PathVariable long id, @RequestBody Map<String,String>statusMap) {
-        try {
-            String status = statusMap.get("status");
+    public ResponseEntity<?> updateStatus(@PathVariable long id, @RequestBody Map<String,String> payload) {
+            String status = payload.get("status");
             parcelService.updateParcelStatus(id, status);
             return ResponseEntity.ok("Status updated successfully");
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
     }
     
 }
