@@ -45,11 +45,7 @@ const Login = () => {
     <div className="login-container">
       <div className="login-card">
 
-        {/* Register Link */}
-        <div className="register-link">
-          <span>New here? </span>
-          <Link to="/register">Sign Up</Link>
-        </div>
+      
 
         <h2>SafeParcel Login</h2>
 
@@ -74,6 +70,10 @@ const Login = () => {
 
           <button type="submit">Login</button>
         </form>
+        <p className="register-link">
+          Don't have an account?{" "}
+          <Link to="/register">Sign Up</Link>
+        </p>
 
       </div>
     </div>

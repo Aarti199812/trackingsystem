@@ -3,7 +3,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background: linear-gradient(135deg, #e3f2fd, #ffffff);
+    background: linear-gradient(135deg, #1a2a6c,#000000);
 }
 
 .login-card {
@@ -48,7 +48,7 @@
 }
 
 .login-card button:hover {
-    background-color: #0056b3;
+    background-color: #b8860b;
 }
 
 .error {
@@ -59,10 +59,9 @@
 
 /* Register Link (Top Right Corner) */
 .register-link {
-    position: absolute;
-    top: 10px;
-    right: 15px;
-    font-size: 13px;
+    text-align: right;
+    margin-bottom: 15px;
+    font-size: 14px;
 }
 
 .register-link a {
