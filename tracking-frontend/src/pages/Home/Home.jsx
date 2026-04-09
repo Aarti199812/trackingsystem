@@ -1,18 +1,26 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; 
 import './Home.css';
 
 const Home = () => {
     const [selected, setSelected] = useState('truck');
+    const navigate = useNavigate(); 
 
     const categories = [
-        { id: 'truck', label: 'Truck', icon: '/assests/image3.png' },
-        { id: 'bike', label: 'Two Wheeler', icon: '/assests/image1.png' },
-        { id: 'movers', label: 'Packers & Movers', icon: '/assests/image4.png' },
+        { id: 'truck', label: 'Truck', icon: '/assests/image3.png', path: '/book-truck' },
+        { id: 'bike', label: 'Two Wheeler', icon: '/assests/image1.png', path: '/book-bike' },
+        { id: 'movers', label: 'Packers & Movers', icon: '/assests/image4.png', path: '/book-movers' },
     ];
+
+   
+    const handleCardClick = (id, path) => {
+        setSelected(id);
+        navigate(path);
+    };
 
     return (
         <div className="home-container">
-            {/* Hero Section with Background */}
+           
             <div className="hero-section">
                 <div className="hero-content">
                     <h1>Your Trust,<br />
@@ -20,10 +28,9 @@ const Home = () => {
                 </div>
             </div>
 
-            {/* Floating Selection Box */}
             <div className="floating-card-wrapper">
                 <div className="white-card">
-                    {/* City Selector Line */}
+                   
                     <div className="city-selector">
                         <span className="pin-icon">📍</span>
                         <span className="city-label">City: </span>
@@ -34,13 +41,12 @@ const Home = () => {
                         </select>
                     </div>
 
-                    {/* Icons and Estimate Button Grid */}
                     <div className="action-grid">
                         {categories.map((item) => (
                             <div 
                                 key={item.id} 
                                 className={`icon-card ${selected === item.id ? 'selected' : ''}`}
-                                onClick={() => setSelected(item.id)}
+                                onClick={() => handleCardClick(item.id, item.path)}
                             >
                                 <div className="img-box">
                                     <img src={item.icon} alt={item.label} />
@@ -49,15 +55,14 @@ const Home = () => {
                             </div>
                         ))}
 
-                        {/* Blue Estimate Card */}
-                        <div className="estimate-card">
+                       
+                        <div className="estimate-card" onClick={() => navigate('/book-truck')}>
                             <div className="estimate-info">
                                 <h3>Get an Estimate</h3>
                                 <p>(takes ~20 mins)</p>
                             </div>
                             <div className="arrow-btn">→</div>
                         </div>
-
                     </div>
                 </div>
             </div>

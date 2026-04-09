@@ -1,0 +1,104 @@
+import React, { useState } from 'react';
+import './TruckBookingPage.css';
+
+const TruckBookingPage = () => {
+  // Cities and their professional background images
+  const cityData = {
+    "Yamunanagar": "https://d3sftlgbtusmnv.cloudfront.net/blog/wp-content/uploads/2024/10/Chaneti-Stupa.jpg",
+    "Kurukshetra": "https://thumbs.dreamstime.com/b/sarveshwar-mahadev-temple-brahma-sarovar-kurukshetra-sarveshwar-mahadev-temple-located-brahma-sarovar-kurukshetra-india-428706026.jpg",
+    "Chandigarh": "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/09/4c/43/64/the-rock-garden-of-chandigarh.jpg?w=900&h=500&s=1",
+    "Karnal": "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/04/7a/f4/f0/noor-mahal.jpg?w=1400&h=1400&s=1",
+    "Ambala": "https://static.where-e.com/India/Gurudwara-Panjokhra-Sahib_4a681ef6e540a5634542a6af91fda8e1.jpg",
+    "Panchkula": "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/04/58/ae/62/morni-hills.jpg?w=1200&h=-1&s=1"
+  };
+
+  const [selectedCity, setSelectedCity] = useState("Yamunanagar");
+
+  const vehicles = [
+    { id: 1, name: '3 Wheeler', cap: '500kg', price: '160', img: 'https://mahindralastmilemobility.com/assets/img/3w_cargo/zor_grand_banner.png' }, //
+    { id: 2, name: 'Tata Ace', cap: '750kg', price: '205', img: 'https://5.imimg.com/data5/SELLER/Default/2023/8/338926613/RI/LX/DB/115397611/tata-ace-pack-body.jpg' },
+    { id: 3, name: 'Pickup 8ft', cap: '1.2 Ton', price: '400', img: 'https://5.imimg.com/data5/SELLER/Default/2023/8/331294480/NF/DP/DD/26338254/mahindra-bolero-pickup-load-body.jpg' },
+    { id: 4, name: 'Tata 407', cap: '2.5 Ton', price: '650', img: 'https://img.gaadibazaar.in/new-vehicle-images/1457694/conversions/215ef9ff-cb77-4eba-8f27-6a419d1b359e-vdp.webp' }
+  ];
+
+  const routes = [
+    { to: "Karnal", kms: "80 Kms", price: "1500" },
+    { to: "Ambala", kms: "55 Kms", price: "1100" },
+    { to: "Chandigarh", kms: "95 Kms", price: "1900" }
+  ];
+
+  return (
+    <div className="booking-wrapper">
+      {/* Dynamic Hero Section */}
+      <section 
+        className="hero-section" 
+        style={{ backgroundImage: `linear-gradient(rgba(15, 23, 42, 0.6), rgba(15, 23, 42, 0.6)), url(${cityData[selectedCity]})` }}
+      >
+        <div className="city-selector-top">
+           <span className="location-icon">📍</span>
+           <select value={selectedCity} onChange={(e) => setSelectedCity(e.target.value)}>
+            {Object.keys(cityData).map(city => (
+              <option key={city} value={city}>{city}</option>
+            ))}
+          </select>
+        </div>
+
+        <div className="hero-text-center">
+            <h1>Mini Truck Booking in <span className="highlight">{selectedCity}</span></h1>
+            <p>Affordable. Reliable. Professional.</p>
+        </div>
+
+        <div className="booking-bar-white">
+          <div className="form-input">
+            <label>Pickup Point *</label>
+            <input type="text" placeholder="House no, Street name" />
+          </div>
+          <div className="form-input">
+            <label>Drop Location *</label>
+            <input type="text" placeholder="Area, Landmark" />
+          </div>
+          <div className="form-input">
+            <label>Mobile Number *</label>
+            <input type="tel" placeholder="+91 00000 00000" />
+          </div>
+          <button className="fare-estimate-btn">
+            Get Fare Estimate <span className="arrow-icon">→</span>
+          </button>
+        </div>
+      </section>
+
+      {/* Vehicle Selection Area */}
+      <section className="vehicle-selection-area">
+        <h2 className="section-title">Available Trucks in {selectedCity}</h2>
+        <div className="vehicle-cards-flex">
+          {vehicles.map((v, index) => (
+            <div key={v.id} className="truck-card slide-up" style={{ animationDelay: `${index * 0.1}s` }}>
+              <div className="cap-tag">{v.cap}</div>
+              <img src={v.img} alt={v.name} />
+              <h4>{v.name}</h4>
+              <p>Starts at <strong>₹{v.price}</strong></p>
+              <button className="select-truck-btn">Select Vehicle</button>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Routes Section */}
+      <section className="popular-routes">
+        <div className="routes-container">
+            <h3>Popular Routes from {selectedCity}</h3>
+            <div className="routes-grid">
+            {routes.map((route, i) => (
+                <div key={i} className="route-card">
+                <strong>to {route.to} ({route.kms})</strong>
+                <p>Est. Fare: ₹{route.price}</p>
+                </div>
+            ))}
+            </div>
+        </div>
+      </section>
+    </div>
+  );
+};
+
+export default TruckBookingPage;
