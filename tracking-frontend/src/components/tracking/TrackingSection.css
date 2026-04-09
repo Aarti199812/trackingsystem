@@ -1,5 +1,4 @@
-<<<<<<< Updated upstream
-=======
+
 .tracking-container {
   max-width: 800px;
   margin: 40px auto;
@@ -106,4 +105,6 @@
   .status-grid { grid-template-columns: 1fr; }
   .search-box { flex-direction: column; }
 }
->>>>>>> Stashed changes
+
+
+

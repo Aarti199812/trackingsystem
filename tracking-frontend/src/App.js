@@ -1,6 +1,8 @@
+
 import React from 'react';
 import { useLocation } from 'react-router-dom';
 import Navbar from './components/Layout/Navbar/Navbar.jsx';
+import Footer from './components/Layout/Footer/Footer.jsx';
 import AppRoutes from './routes/AppRoutes';
 import './App.css';
 
@@ -25,6 +27,7 @@ function App() {
       <main className="container">
         <AppRoutes />
       </main>
+      <Footer/>
     </div>
   );
 }
