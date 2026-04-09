@@ -1,5 +1,4 @@
-<<<<<<< Updated upstream
-=======
+
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import BookingForm from '../components/booking/BookingForm';
@@ -33,4 +32,4 @@ const AppRoutes = () => {
 };
 
 export default AppRoutes;
->>>>>>> Stashed changes
+

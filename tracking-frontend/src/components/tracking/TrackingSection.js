@@ -36,9 +36,7 @@ const TrackingSection = () => {
         }
     };
 
-<<<<<<< Updated upstream
       {error && <p className="error-message" style={{ color: 'red', marginTop: '10px' }}>{error}</p>}
-=======
     return (
         <div className="tracking-container" >
             <div className="tracking-search-card">
@@ -58,7 +56,6 @@ const TrackingSection = () => {
                 </form>
                 {error && <p className="error-text">{error}</p>}
             </div>
->>>>>>> Stashed changes
 
             {parcel && (
                 <div className="status-card">

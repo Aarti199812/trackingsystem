@@ -1,5 +1,4 @@
-<<<<<<< Updated upstream
-=======
+
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
@@ -80,4 +79,4 @@ const Login = () => {
 };
 
 export default Login;
->>>>>>> Stashed changes
+
