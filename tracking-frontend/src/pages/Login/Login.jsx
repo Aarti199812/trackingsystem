@@ -17,22 +17,23 @@ const Login = () => {
     try {
       const response = await axios.post(
         "http://localhost:9023/api/users/login",
-        {
-          email,
-          password,
-        },
+        { email, password }
       );
 
       const user = response.data;
 
       localStorage.setItem("user", JSON.stringify(user));
 
-      if (user.role === "admin") {
+      // Handle both ADMIN and admin
+      if (user.role?.toLowerCase() === "admin") {
         navigate("/admin-dashboard");
       } else {
         navigate("/user-dashboard");
       }
+
     } catch (error) {
+      console.log("ERROR:", error);
+
       if (error.response) {
         setError(error.response.data);
       } else {
@@ -44,11 +45,8 @@ const Login = () => {
   return (
     <div className="login-container">
       <div className="login-card">
-        {/* Top Right Register Link */}
-        <div className="register-link">
-          <span>New here? </span>
-          <Link to="/register">Sign Up</Link>
-        </div>
+
+      
 
         <h2>SafeParcel Login</h2>
 
@@ -73,10 +71,13 @@ const Login = () => {
 
           <button type="submit">Login</button>
         </form>
+        <p className="register-link">
+          Don't have an account?{" "}
+          <Link to="/register">Sign Up</Link>
+        </p>
+
       </div>
     </div>
   );
 };
-
 export default Login;
-

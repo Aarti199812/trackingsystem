@@ -12,6 +12,7 @@ public class ParcelRequest {
     private double distanceKm;
     private String vehicleType;
 
+
     private Long userId;
 
     // Getters & Setters

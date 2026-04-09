@@ -47,4 +47,28 @@ public class UserController {
 
         return ResponseEntity.status(404).body("User not found");
     }
+
+    @PostMapping("/register")
+    public ResponseEntity<?> registerUser(@RequestBody User user){
+
+        if(user.getName()==null || user.getEmail()== null || user.getPassword() == null){
+            return ResponseEntity.badRequest().body("Name, Email and Password are required");
+        }
+
+        Optional<User> existingUser = userRepository.findByEmail(user.getEmail());
+        if(existingUser.isPresent()){
+            return ResponseEntity.status(409).body("user alread exists with this email.");
+        }
+        user.setRole("USER");
+        User savedUser = userRepository.save(user);
+
+        return ResponseEntity.ok(Map.of(
+                "message","user registered successfully",
+                "id", savedUser.getId(),
+                "name", savedUser.getName(),
+                "email", savedUser.getEmail(),
+                "role", savedUser.getRole()
+        ));
+    }
+
 }

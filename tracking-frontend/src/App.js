@@ -1,9 +1,9 @@
 
 import React from 'react';
+import { useLocation } from 'react-router-dom';
 import Navbar from './components/Layout/Navbar/Navbar.jsx';
-import Home from './pages/Home/Home.jsx';
+import Footer from './components/Layout/Footer/Footer.jsx';
 import AppRoutes from './routes/AppRoutes';
-import { useLocation } from 'react-router-dom'; 
 import './App.css';
 
 function App() {
@@ -11,23 +11,25 @@ function App() {
 
   const headerRoutes = ["/book", "/track"];
   const showHeader = headerRoutes.includes(location.pathname);
-    return (
-      <div className="App">
-        <Navbar />
-        {/* <Home /> */}
-        {showHeader && (
-          <header className="app-header">
-            <h1>SafeParcel Management System</h1>
-          </header>
-        )}
 
-        <main className="container">
-          <AppRoutes />
-        </main>
+  return (
+    <div className="App">
+      <Navbar />
 
-        {/* <Footer /> */}
-      </div>
-    );
+      {showHeader && (
+        <header className="app-header">
+          <h1 style={{ textAlign: 'center', margin: '20px' }}>
+            SafeParcel Management System
+          </h1>
+        </header>
+      )}
+
+      <main className="container">
+        <AppRoutes />
+      </main>
+      <Footer/>
+    </div>
+  );
 }
 
 export default App;
