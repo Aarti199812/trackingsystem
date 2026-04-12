@@ -40,6 +40,9 @@ public class ParcelService {
         if (request.getUserId() == null) {
             throw new RuntimeException("UserId is missing");
         }
+        if (request.getUserId() == null || request.getUserId() <= 0) {
+            throw new RuntimeException("Invalid userId");
+        }
 
         Optional<User> userOptional = userRepository.findById(request.getUserId());
 

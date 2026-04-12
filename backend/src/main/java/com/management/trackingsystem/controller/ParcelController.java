@@ -3,8 +3,6 @@ package com.management.trackingsystem.controller;
 import com.management.trackingsystem.dto.ParcelRequest;
 import com.management.trackingsystem.model.Parcel;
 import com.management.trackingsystem.service.ParcelService;
-
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,15 +32,24 @@ public class ParcelController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-    @GetMapping("/all")
-    public ResponseEntity<List<Parcel>> getAllParcels() {
-        List<Parcel> parcels = parcelService.getAllParcels();
-        return ResponseEntity.ok(parcels);
+//    @GetMapping("/all")
+//    public ResponseEntity<List<Parcel>> getAllParcels() {
+//        List<Parcel> parcels = parcelService.getAllParcels();
+//        return ResponseEntity.ok(parcels);
+//    }
+@GetMapping("/all")
+public ResponseEntity<?> getAllParcels() {
+    try {
+        return ResponseEntity.ok(parcelService.getAllParcels());
+    } catch (Exception e) {
+        e.printStackTrace();   // 🔥 CHECK CONSOLE
+        return ResponseEntity.status(500).body(e.getMessage());
     }
+}
 
     @PutMapping("/update-status/{id}")
-    public ResponseEntity<?> updateStatus(@PathVariable long id, @RequestBody Map<String,String> payload) {
-            String status = payload.get("status");
+    public ResponseEntity<?> updateStatus(@PathVariable long id, @RequestBody Map<String,String> statusUpdate) {
+            String status = statusUpdate.get("status");
             parcelService.updateParcelStatus(id, status);
             return ResponseEntity.ok("Status updated successfully");
     }

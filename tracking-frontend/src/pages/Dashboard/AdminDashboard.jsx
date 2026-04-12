@@ -97,7 +97,9 @@ const AdminDashboard = () => {
                     <table className="admin-table">
                         <thead>
                             <tr>
-                                <th>User</th>
+                                <th>Id</th>
+                                <th>Tracking Id</th>
+                                <th>Sender</th>
                                 <th>From - To</th>
                                 <th>Vehicle</th>
                                 <th>Status</th>
