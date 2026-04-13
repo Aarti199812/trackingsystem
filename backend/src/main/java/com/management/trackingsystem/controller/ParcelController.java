@@ -3,8 +3,6 @@ package com.management.trackingsystem.controller;
 import com.management.trackingsystem.dto.ParcelRequest;
 import com.management.trackingsystem.model.Parcel;
 import com.management.trackingsystem.service.ParcelService;
-
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;

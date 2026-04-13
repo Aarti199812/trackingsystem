@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useLocation } from 'react-router-dom';
 import Navbar from './components/Layout/Navbar/Navbar.jsx';
@@ -9,7 +8,8 @@ import './App.css';
 function App() {
   const location = useLocation();
 
-  const headerRoutes = ["/book", "/track"];
+  // In routes par header dikhega (Add /book-truck here for your new page)
+  const headerRoutes = ["/book", "/track", "/book-truck"];
   const showHeader = headerRoutes.includes(location.pathname);
 
   return (
@@ -18,16 +18,18 @@ function App() {
 
       {showHeader && (
         <header className="app-header">
-          <h1 style={{ textAlign: 'center', margin: '20px' }}>
+          <h1 style={{ textAlign: 'center', margin: '20px', color: '#1d4ed8' }}>
             SafeParcel Management System
           </h1>
         </header>
       )}
 
       <main className="container">
+        {/* Saare pages yahan load honge */}
         <AppRoutes />
       </main>
-      <Footer/>
+
+      <Footer />
     </div>
   );
 }
