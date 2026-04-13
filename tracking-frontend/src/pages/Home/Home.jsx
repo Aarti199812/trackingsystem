@@ -22,6 +22,9 @@ const Home = () => {
         <div className="home-container">
            
             <div className="hero-section">
+                <video autoPlay loop muted className="video-bg">
+                    <source src="/hero.mp4" type="video/mp4" />
+                </video>
                 <div className="hero-content">
                     <h1>Your Trust,<br />
                     <span className="highlight-text">Our Journey</span></h1>

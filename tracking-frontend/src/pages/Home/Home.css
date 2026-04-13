@@ -7,20 +7,27 @@
 
 /* Hero Section with BG Image */
 .hero-section {
-    width: 90%;
+    position: relative;
+    width: 100%;
     height: 450px;
-    background-image: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.2)), 
-                      url('../../assets/hero_image1.jpg');
-    background-size: cover;
-    background-position: center;
-    display: flex;
-    align-items: center;
-    padding-left: 8%;
+    overflow: hidden;
 }
+
+.video-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+}
+
 
 .hero-content h1 {
     color: white;
     font-size: 45px;
+    
     font-weight: 800;
     line-height: 1.2;
 }
@@ -43,6 +50,9 @@
 .white-card {
     background: white;
     border-radius: 12px;
+    margin-top: 150px;
+    position: relative;
+    z-index: 10;
     padding: 25px 40px;
     box-shadow: 0 10px 40px rgba(0,0,0,0.12);
 }
