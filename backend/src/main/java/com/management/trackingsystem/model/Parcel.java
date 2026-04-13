@@ -2,15 +2,15 @@ package com.management.trackingsystem.model;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+import lombok.*;
 
 @Entity
 @Table(name = "parcels")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -32,16 +32,17 @@ public class Parcel {
     private String vehicleType;
     private double totalPrice;
 
-    private double pickupLat;
-    private double pickupLng;
-    private double dropLat;
-    private double dropLng;
-
     private double distanceKm;
 
     private String senderPhone;
     private String recipientPhone;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    @JsonIgnore
+    private User user;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 

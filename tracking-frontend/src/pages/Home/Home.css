@@ -7,15 +7,33 @@
 
 /* Hero Section with BG Image */
 .hero-section {
-    width: 90%;
-    height: 450px;
+    width: 92%;
+    height: 300px;
+    max-height: 300px;
     background-image: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.2)), 
-                      url('../../assets/hero_image1.jpg');
+                      url('../../assets/background_image1.jpeg');
     background-size: cover;
+    max-width: 92%;
     background-position: center;
     display: flex;
-    align-items: center;
+    align-items: center;      
+    justify-content: flex-start;
     padding-left: 8%;
+    
+    }
+
+.hero-content {
+    align-self: flex-start;
+    margin-left: 0;
+    margin-top: 70px;
+}
+
+.hero-content {
+    text-align: left;
+    width: fit-content;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
 }
 
 .hero-content h1 {
@@ -23,6 +41,8 @@
     font-size: 45px;
     font-weight: 800;
     line-height: 1.2;
+    margin: 0;
+    text-align: left;
 }
 
 .highlight-text {
@@ -112,7 +132,7 @@
 /* The Blue Button/Card */
 .estimate-card {
     flex: 1.5;
-    background: #0046ff;
+    background: #1a2a6c;
     color: white;
     padding: 20px 25px;
     border-radius: 12px;
@@ -124,7 +144,9 @@
 }
 
 .estimate-card:hover {
-    background: #0036cc;
+    background: white;
+    color: #b8860b;
+    border: 2px solid #b8860b;
 }
 
 .estimate-info h3 {
@@ -142,4 +164,52 @@
 .arrow-btn {
     font-size: 24px;
     font-weight: bold;
+}
+
+
+
+
+
+
+.hero-section {
+    position: relative;
+    width: 100%;
+    height: 300px;
+    overflow: hidden;
+}
+
+
+.hero-bg {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+}
+.truck {
+    position: absolute;
+    bottom: 20px;
+    right: -300px; 
+    z-index: 2;
+    transition: all 3s ease-out;
+}
+.truck{
+    width: 600px;
+    height: 300px;
+    margin-bottom: 50px;
+}
+.truck-animate {
+    right: 15%; 
+}
+.hero-text {
+    position: absolute;
+    top: 30%;
+    left: -300px; /* start outside */
+    transform: translateY(-50%);
+    color: white;
+    z-index: 3;
+    transition: all 3s ease-out;
+}
+.text-animate {
+    left: 10%; 
 }
