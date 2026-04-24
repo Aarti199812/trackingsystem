@@ -1,153 +1,41 @@
-.booking-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-    padding: 20px;
-    font-family: 'Inter', sans-serif;
+.booking-page { background-color: #f1f5f9; padding: 50px 20px; font-family: 'Inter', sans-serif; }
+.booking-header { text-align: center; margin-bottom: 40px; }
+.highlight { color: #3b82f6; }
+
+.form-container { max-width: 850px; margin: 0 auto; display: flex; flex-direction: column; gap: 25px; }
+.step-card { background: white; border-radius: 12px; padding: 35px; position: relative; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+.step-badge { position: absolute; top: 32px; left: -15px; background: #1e3a8a; color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; border: 3px solid #f1f5f9; }
+
+.input-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px; }
+.input-field label { font-size: 10px; font-weight: 800; color: #ef4444; margin-bottom: 8px; display: block; }
+.input-field input, .input-field select { width: 100%; padding: 12px; border: 1px solid #e2e8f0; border-radius: 6px; background: #fff; outline: none; }
+.input-field input[readOnly] { background: #f8fafc; color: #64748b; }
+.full { grid-column: span 2; }
+
+.weight-section { text-align: center; margin-bottom: 30px; }
+.weight-section h2 { font-size: 42px; color: #1e3a8a; margin-bottom: 10px; }
+.weight-section input { width: 100%; accent-color: #1e3a8a; 
 }
 
-.booking-card-main {
-    background: white;
-    padding: 40px;
-    border-radius: 24px;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.08);
-    width: 100%;
-    max-width: 550px;
-}
+.vehicle-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.v-card { border: 2px solid #f1f5f9; padding: 15px; border-radius: 10px; text-align: center; cursor: pointer; transition: 0.3s; }
+.v-card.active { border-color: #1e3a8a; background: #eff6ff; }
+.v-card img { width: 45px; margin-bottom: 8px; }
+.v-card h4 { font-size: 14px; margin: 5px 0; }
+.v-card span { font-size: 10px; color: #64748b; }
+.v-price { color: #10b981; font-weight: bold; font-size: 12px; margin-top: 5px; }
 
-.header-section {
-    text-align: center;
-    margin-bottom: 30px;
-}
+.calc-btn { width: 100%; background: #1e3a8a; color: white; border: none; padding: 18px; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 15px; }
 
-.header-section h2 {
-    font-size: 24px;
-    margin-bottom: 8px;
-    color: #1a1a1a;
-}
+.bill-summary { background: #0f172a; color: white; border-radius: 12px; padding: 35px; margin-top: 20px; text-align: center; }
+.bill-main .label { font-size: 12px; color: #94a3b8; }
+.bill-main h1 { font-size: 56px; margin: 10px 0; color: #fff; }
+.bill-details-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; border-top: 1px solid #334155; padding-top: 25px; margin-bottom: 25px; font-size: 13px; color: #cbd5e1; }
 
-.header-section p {
-    color: #666;
-    font-size: 14px;
-}
+.instructions label { display: block; text-align: left; font-size: 10px; color: #94a3b8; margin-bottom: 10px; }
+.instructions textarea { width: 100%; background: #1e293b; border: 1px solid #334155; border-radius: 8px; color: white; padding: 15px; height: 80px; margin-bottom: 25px; }
 
-.form-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 15px;
-}
+.confirm-btn { width: 100%; background: #ca8a04; color: white; border: none; padding: 16px; border-radius: 8px; font-weight: 800; cursor: pointer; font-size: 16px; }
 
-.input-with-label label {
-    font-size: 12px;
-    font-weight: 600;
-    color: #888;
-    margin-bottom: 5px;
-    display: block;
-}
-
-input {
-    width: 100%;
-    padding: 14px;
-    margin-bottom: 20px;
-    border: 1.5px solid #eee;
-    border-radius: 12px;
-    font-size: 15px;
-    transition: all 0.3s;
-}
-
-input:focus {
-    outline: none;
-    border-color: #2b267c;
-    background: #f9f9ff;
-}
-
-.section-label {
-    display: block;
-    font-weight: 700;
-    margin: 10px 0 15px 0;
-    color: #333;
-}
-
-/* Vehicle Selection Grid */
-.vehicle-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    margin-bottom: 25px;
-}
-
-.vehicle-item {
-    display: flex;
-    align-items: center;
-    padding: 16px;
-    border: 2px solid #f0f0f0;
-    border-radius: 16px;
-    cursor: pointer;
-    position: relative;
-    transition: all 0.2s ease;
-}
-
-.vehicle-item:hover {
-    background: #fafafa;
-    border-color: #ddd;
-}
-
-.vehicle-item.active {
-    border-color: #3a3499;
-    background-color: #f5f3ff;
-}
-
-.vehicle-icon-wrapper {
-    background: #f3f4f6;
-    padding: 10px;
-    border-radius: 12px;
-    margin-right: 15px;
-    color: #4b5563;
-}
-
-.vehicle-item.active .vehicle-icon-wrapper {
-    background: #342f96;
-    color: white;
-}
-
-.vehicle-info {
-    flex-grow: 1;
-}
-
-.v-title {
-    display: block;
-    font-weight: 700;
-    font-size: 16px;
-}
-
-.v-desc {
-    font-size: 13px;
-    color: #6b7280;
-}
-
-.selected-dot {
-    width: 10px;
-    height: 10px;
-    background: #201c75;
-    border-radius: 50%;
-}
-
-.book-btn {
-    width: 100%;
-    padding: 16px;
-    background: #211c78;
-    color: white;
-    border: none;
-    border-radius: 12px;
-    font-size: 16px;
-    font-weight: 700;
-    cursor: pointer;
-    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
-}
-
-.book-btn:hover {
-    background: #1a1556;
-    transform: translateY(-1px);
-}
+.fade-in { animation: fadeIn 0.6s ease-out; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }

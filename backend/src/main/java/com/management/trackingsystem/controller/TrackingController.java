@@ -1,5 +1,10 @@
 package com.management.trackingsystem.controller;
 
+import com.management.trackingsystem.model.Parcel;
+import com.management.trackingsystem.repository.ParcelRepository;
+import com.management.trackingsystem.model.User;
+import com.management.trackingsystem.repository.UserRepository;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,9 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import com.management.trackingsystem.service.RouteService;
-
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
@@ -21,8 +27,36 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("/api/tracking")
 public class TrackingController {
 
+    private final ParcelRepository parcelRepository;
     @Autowired
     private RouteService routeService;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @PostMapping("/confirm")
+    public ResponseEntity<?> confirmParcel(@RequestBody Parcel parcel){
+        try{
+            if (parcel.getUser()!= null && parcel.getUser().getId()!=null){
+                System.out.println("user id" +parcel.getUser().getId());
+                User existingUser = userRepository.findById(parcel.getUser().getId())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+                parcel.setUser(existingUser);
+                System.out.println("null request");
+            }
+            parcel.setStatus("Pending");
+            Parcel savedParcel = parcelRepository.save(parcel);
+            return 
+             ResponseEntity.ok(savedParcel);
+    } catch(Exception e){
+        e.printStackTrace();
+        return ResponseEntity.status(500).body("Error:" + e.getMessage());
+    }
+}
+
+    TrackingController(ParcelRepository parcelRepository) {
+        this.parcelRepository = parcelRepository;
+    }
 
     @GetMapping("/get-distance")
     public ResponseEntity<String> getDistance(
@@ -31,7 +65,8 @@ public class TrackingController {
         
         return ResponseEntity.ok(routeService.getRouteDetails(sLat, sLng, dLat, dLng));
     }
-
+    
+    
     @GetMapping("/get-fare")
     public ResponseEntity<Map<String, Object>> getFare(
             @RequestParam String from, 

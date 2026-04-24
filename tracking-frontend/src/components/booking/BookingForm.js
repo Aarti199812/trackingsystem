@@ -1,399 +1,193 @@
-// import React, { useState } from 'react';
-// import axios from 'axios';
-// import { useNavigate } from 'react-router-dom';
-// import './BookingForm.css';
-
-// const BookingForm = () => {
-//     const navigate = useNavigate();
-//     const [loading, setLoading] = useState(false);
-
-//     const [formData, setFormData] = useState({
-//         senderName: '',
-//         recipientName: '',
-//         senderPhone: '',
-//         sourceAddress: '',
-//         destinationAddress: '',
-//         vehicleType: 'bike',
-//         weight: '',
-//         distanceKm: '',
-//         status: 'PENDING'
-//     });
-
-//     const vehicleOptions = [
-//         { id: 'bike', label: 'Two-Wheeler', desc: 'Up to 20kg' },
-//         { id: 'tata ace', label: 'Tata Ace', desc: '700kg Capacity' },
-//         { id: 'pickup 8ft', label: 'Pickup 8ft', desc: '1.5 Tonne' }
-//     ];
-
-//     const handleChange = (e) => {
-//         const { name, value } = e.target;
-
-//         setFormData({
-//             ...formData,
-//             [name]: value
-//         });
-//     };
-
-//     const handleVehicleSelect = (id) => {
-//         setFormData({ ...formData, vehicleType: id });
-//     };
-
-//     const handleSubmit = async (e) => {
-//         e.preventDefault();
-//         setLoading(true);
-
-//         try {
-//             const loggedInUser = JSON.parse(localStorage.getItem('user'));
-
-//             if (!loggedInUser || !loggedInUser.id) {
-//                 alert("Please log in first");
-//                 navigate('/login');
-//                 return;
-//             }
-
-//             // ✅ Ensure clean numeric values
-//             const weight = parseFloat(formData.weight);
-//             const distance = parseFloat(formData.distanceKm);
-
-//             if (isNaN(weight) || isNaN(distance)) {
-//                 alert("Please enter valid weight and distance");
-//                 return;
-//             }
-
-//             const completeData = {
-//     senderName: formData.senderName,
-//     recipientName: formData.recipientName,
-//     senderPhone: formData.senderPhone,
-//     sourceAddress: formData.sourceAddress,
-//     destinationAddress: formData.destinationAddress,
-//     weight: weight,
-//     distanceKm: distance,
-//     vehicleType: formData.vehicleType.toLowerCase().trim(),
-//     userId: loggedInUser.id
-//             };
-
-//             console.log("Payload:", completeData);
-
-//             const res = await axios.post(
-//                 "http://localhost:9023/api/parcels/book",
-//                 completeData
-//             );
-
-//             if (res.data && res.data.trackingId) {
-//                 alert(`Booking Successful! Tracking ID: ${res.data.trackingId}`);
-//                 navigate('/user-dashboard');
-//             }
-
-//         } catch (error) {
-//             console.error("FULL ERROR:", error);
-//             console.error("RESPONSE:", error.response);
-
-//             alert(
-//                 error.response?.data?.message ||
-//                 JSON.stringify(error.response?.data) ||
-//                 "Server error"
-//             );
-//         } finally {
-//             setLoading(false);
-//         }
-//     };
-
-//     return (
-//         <div className="booking-container">
-//             <div className="booking-card-main">
-//                 <h2>🚀 Book Your Parcel</h2>
-
-//                 <form onSubmit={handleSubmit}>
-
-//                     <div className="form-row">
-//                         <input
-//                             type="text"
-//                             name="senderName"
-//                             placeholder="Sender Name"
-//                             onChange={handleChange}
-//                             required
-//                         />
-
-//                         <input
-//                             type="text"
-//                             name="recipientName"
-//                             placeholder="Recipient Name"
-//                             onChange={handleChange}
-//                             required
-//                         />
-//                     </div>
-
-//                     <div className="form-row">
-//                         <input
-//                             type="text"
-//                             name="senderPhone"
-//                             placeholder="Phone Number"
-//                             onChange={handleChange}
-//                             required
-//                         />
-//                     </div>
-
-//                     <input
-//                         type="text"
-//                         name="sourceAddress"
-//                         placeholder="Pickup Address"
-//                         onChange={handleChange}
-//                         required
-//                     />
-
-//                     <input
-//                         type="text"
-//                         name="destinationAddress"
-//                         placeholder="Drop Address"
-//                         onChange={handleChange}
-//                         required
-//                     />
-
-//                     <label className="section-label">Select Vehicle Type</label>
-
-//                     <div className="vehicle-grid">
-//                         {vehicleOptions.map((vehicle) => (
-//                             <div
-//                                 key={vehicle.id}
-//                                 className={`vehicle-item ${
-//                                     formData.vehicleType === vehicle.id ? 'active' : ''
-//                                 }`}
-//                                 onClick={() => handleVehicleSelect(vehicle.id)}
-//                             >
-//                                 <span>{vehicle.label}</span>
-//                                 <small>{vehicle.desc}</small>
-//                             </div>
-//                         ))}
-//                     </div>
-
-//                     <div className="form-row">
-//                         <input
-//                             type="number"
-//                             name="distanceKm"
-//                             placeholder="Distance (km)"
-//                             onChange={handleChange}
-//                             required
-//                         />
-
-//                         <input
-//                             type="number"
-//                             name="weight"
-//                             placeholder="Weight (kg)"
-//                             onChange={handleChange}
-//                             required
-//                         />
-//                     </div>
-
-//                     <button type="submit" disabled={loading}>
-//                         {loading ? 'Processing...' : 'Book Now'}
-//                     </button>
-
-//                 </form>
-//             </div>
-//         </div>
-//     );
-// };
-
-// export default BookingForm;
-
-import React, { useState } from "react";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import "./BookingForm.css";
+import React, { useState, useEffect } from 'react';
+import './BookingForm.css';
 
 const BookingForm = () => {
-  const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
+    
+    const savedName = localStorage.getItem('userName') || "";
+    const savedPhone = localStorage.getItem('userPhone') || "";
 
-  const [formData, setFormData] = useState({
-    senderName: "",
-    recipientName: "",
-    senderPhone: "",
-    sourceAddress: "",
-    destinationAddress: "",
-    vehicleType: "bike",
-    weight: "",
-    distanceKm: "",
-    status: "PENDING",
-  });
-
-  const vehicleOptions = [
-    { id: "bike", label: "Two-Wheeler", desc: "Up to 20kg" },
-    { id: "tata ace", label: "Tata Ace", desc: "700kg Capacity" },
-    { id: "pickup 8ft", label: "Pickup 8ft", desc: "1.5 Tonne" },
-  ];
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-
-    setFormData({
-      ...formData,
-      [name]: value,
+    const [booking, setBooking] = useState({
+        senderName: savedName,
+        senderPhone: savedPhone,
+        pickupAddress: '',
+        fromCity: '',
+        recipientName: '',
+        recipientPhone: '',
+        dropAddress: '',
+        toCity: '',
+        parcelType: 'General Goods'
     });
-  };
 
-  const handleVehicleSelect = (id) => {
-    setFormData({ ...formData, vehicleType: id });
-  };
+    const [weight, setWeight] = useState(123);
+    const [selectedVehicle, setSelectedVehicle] = useState('3 Wheeler');
+    const [fareData, setFareData] = useState(null);
+    const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
+    const vehicles = [
+        { name: '3 Wheeler', cap: '500kg', type: '3wheeler', img: 'https://nest-platform-assets.porter.in/3_wheeler_d873d6117b.svg' },
+        { name: 'Tata Ace', cap: '750kg', type: 'tataace', img: 'https://nest-platform-assets.porter.in/tata_ace_190014022a.svg' },
+        { name: 'Pickup 8ft', cap: '1.2 Ton', type: 'pickup8ft', img: 'https://nest-platform-assets.porter.in/pickup_8ft_7d781b29d9.svg' },
+        { name: 'Medium Truck', cap: '3 Ton', type: 'mediumtruck', img: 'https://nest-platform-assets.porter.in/truck_14ft_9731295982.svg' }
+    ];
+
+    const cities = ["Yamunanagar", "Radaur", "Kurukshetra", "Karnal", "Ambala", "Chandigarh"];
+
+    const handleCalculate = async () => {
+        if (!booking.fromCity || !booking.toCity) {
+            alert("Please select both cities!");
+            return;
+        }
+        setLoading(true);
+        try {
+            const vType = vehicles.find(v => v.name === selectedVehicle).type;
+            const res = await fetch(`http://localhost:9023/api/tracking/get-fare?from=${booking.fromCity}&to=${booking.toCity}&vehicleType=${vType}&weight=${weight}`);
+
+            if (!res.ok) throw new Error("backend error")
+            const data = await res.json();
+            setFareData(data);
+        } catch (err) {
+            console.error(err);
+        } finally {
+            setLoading(false);
+        }
+    };
+        
+        const handleConfirm = async () => {
+    if (!fareData) {
+        alert("Calculate fare!");
+        return;
+    }
+       const userId= 2;
+    // const loggedInUserId = localStorage.getItem('userId') || 1; 
+    const payload = {
+        trackingId: "SP-" + Math.floor(100000 + Math.random() * 900000), // Unique ID
+        senderName: booking.senderName,
+        recipientName: booking.recipientName,
+        sourceAddress: booking.pickupAddress, // Java: sourceAddress
+        destinationAddress: booking.dropAddress, // Java: destinationAddress
+        weight: parseFloat(weight),
+        status: "Pending",
+        vehicleType: selectedVehicle,
+        totalPrice: parseFloat(fareData.fare),
+        distanceKm: parseFloat(fareData.distance.replace(/[^0-9.]/g, '')), // "60.9 km" -> 60.9
+        senderPhone: booking.senderPhone,
+        recipientPhone: booking.recipientPhone,
+        // CRITICAL: User mapping
+        // user: { id: parseInt(loggedInUserId) } 
+        user: { id: 2 }
+    };
 
     try {
-      const loggedInUser = JSON.parse(localStorage.getItem("user"));
+        const response = await fetch("http://localhost:9023/api/tracking/confirm", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+        });
 
-      if (!loggedInUser || !loggedInUser.id) {
-        alert("Please log in first");
-        navigate("/login");
-        return;
-      }
-
-      // ✅ Ensure clean numeric values
-      const weight = parseFloat(formData.weight);
-      const distance = parseFloat(formData.distanceKm);
-
-      if (isNaN(weight) || isNaN(distance)) {
-        alert("Please enter valid weight and distance");
-        return;
-      }
-
-      const completeData = {
-        senderName: formData.senderName,
-        recipientName: formData.recipientName,
-        senderPhone: formData.senderPhone,
-        recipientPhone: formData.senderPhone, // temporary fix (or add input field)
-
-        sourceAddress: formData.sourceAddress,
-        destinationAddress: formData.destinationAddress,
-
-        weight: weight,
-        distanceKm: distance,
-
-        vehicleType: formData.vehicleType,
-        status: "PENDING",
-
-        userId: loggedInUser.id, // ✅ THIS IS THE KEY FIX
-        
-      };
-
-      console.log("Payload:", completeData);
-
-      const res = await axios.post(
-        "http://localhost:9023/api/parcels/book",
-        completeData,
-      );
-
-      if (res.data && res.data.trackingId) {
-        alert(`Booking Successful! Tracking ID: ${res.data.trackingId}`);
-        navigate("/user-dashboard");
-      }
-    } catch (error) {
-      console.error("FULL ERROR:", error);
-      console.error("RESPONSE:", error.response);
-
-      alert(
-        error.response?.data?.message ||
-          JSON.stringify(error.response?.data) ||
-          "Server error",
-      );
-    } finally {
-      setLoading(false);
+        if (response.ok) {
+            alert("🎉 Success! Booking saved successfully.");
+        } else {
+            const errorMsg = await response.text();
+            console.error("Backend Error:", errorMsg);
+            alert("Error: " + errorMsg);
+        }
+    } catch (err) {
+        alert("Server not connected !");
     }
-  };
+};
 
-  return (
-    <div className="booking-container">
-      <div className="booking-card-main">
-        <h2>🚀 Book Your Parcel</h2>
+           
+    return (
+        <div className="booking-page">
+            <div className="form-container">
+                {/* Step 1: Sender */}
+                <div className="step-card">
+                    <div className="step-badge">1</div>
+                    <h3>Sender Details</h3>
+                    <div className="input-grid">
+                        <div className="input-field">
+                            <label>SENDER NAME *</label>
+                            <input type="text" value={booking.senderName} onChange={(e) => setBooking({...booking, senderName: e.target.value})} />
+                        </div>
+                        <div className="input-field">
+                            <label>MOBILE *</label>
+                            <input type="text" value={booking.senderPhone} onChange={(e) => setBooking({...booking, senderPhone: e.target.value})} />
+                        </div>
+                        <div className="input-field full">
+                            <label>PICKUP ADDRESS *</label>
+                            <input type="text" placeholder="Street / Area" onChange={(e) => setBooking({...booking, pickupAddress: e.target.value})} />
+                        </div>
+                        <div className="input-field">
+                            <label>FROM CITY *</label>
+                            <select onChange={(e) => setBooking({...booking, fromCity: e.target.value})}>
+                                <option value="">Select City</option>
+                                {cities.map(c => <option key={c} value={c}>{c}</option>)}
+                            </select>
+                        </div>
+                    </div>
+                </div>{/* Step 2: Receiver */}
+                <div className="step-card">
+                    <div className="step-badge">2</div>
+                    <h3>Receiver Details</h3>
+                    <div className="input-grid">
+                        <div className="input-field">
+                            <label>RECEIVER NAME *</label>
+                            <input type="text" placeholder="Full Name" onChange={(e) => setBooking({...booking, recipientName: e.target.value})} />
+                        </div>
+                        <div className="input-field">
+                            <label>MOBILE *</label>
+                            <input type="text" placeholder="Mobile No" onChange={(e) => setBooking({...booking, recipientPhone: e.target.value})} />
+                        </div>
+                        <div className="input-field full">
+                            <label>DROP ADDRESS *</label>
+                            <input type="text" placeholder="Delivery Address" onChange={(e) => setBooking({...booking, dropAddress: e.target.value})} />
+                        </div>
+                        <div className="input-field">
+                            <label>TO CITY *</label>
+                            <select onChange={(e) => setBooking({...booking, toCity: e.target.value})}>
+                                <option value="">Select City</option>
+                                {cities.map(c => <option key={c} value={c}>{c}</option>)}
+                            </select>
+                        </div>
+                    </div>
+                </div>
 
-        <form onSubmit={handleSubmit}>
-          <div className="form-row">
-            <input
-              type="text"
-              name="senderName"
-              placeholder="Sender Name"
-              onChange={handleChange}
-              required
-            />
+                {/* Step 3: Weight & Vehicle */}
+                <div className="step-card">
+                    <div className="step-badge">3</div>
+                    <h3>Weight & Vehicle</h3>
+                    <div className="weight-section">
+                        <h2>{weight} kg</h2>
+                        <input type="range" min="1" max="500" value={weight} onChange={(e) => setWeight(e.target.value)} />
+                    </div>
+                    <div className="vehicle-grid">
+                        {vehicles.map(v => (
+                            <div key={v.name} className={`v-card ${selectedVehicle === v.name ? "active" : ""}`} onClick={() => setSelectedVehicle(v.name)}>
+                                <img src={v.img} alt={v.name} style={{width:'40px'}}/>
+                                <h4>{v.name}</h4>
+                                <span>{v.cap}</span>
+                            </div>
+                        ))}
+                    </div>
+                </div>
 
-            <input
-              type="text"
-              name="recipientName"
-              placeholder="Recipient Name"
-              onChange={handleChange}
-              required
-            />
-          </div>
-
-          <div className="form-row">
-            <input
-              type="text"
-              name="senderPhone"
-              placeholder="Phone Number"
-              onChange={handleChange}
-              required
-            />
-          </div>
-
-          <input
-            type="text"
-            name="sourceAddress"
-            placeholder="Pickup Address"
-            onChange={handleChange}
-            required
-          />
-
-          <input
-            type="text"
-            name="destinationAddress"
-            placeholder="Drop Address"
-            onChange={handleChange}
-            required
-          />
-
-          <label className="section-label">Select Vehicle Type</label>
-
-          <div className="vehicle-grid">
-            {vehicleOptions.map((vehicle) => (
-              <div
-                key={vehicle.id}
-                className={`vehicle-item ${
-                  formData.vehicleType === vehicle.id ? "active" : ""
-                }`}
-                onClick={() => handleVehicleSelect(vehicle.id)}
-              >
-                <span>{vehicle.label}</span>
-                <small>{vehicle.desc}</small>
-              </div>
-            ))}
-          </div>
-
-          <div className="form-row">
-            <input
-              type="number"
-              name="distanceKm"
-              placeholder="Distance (km)"
-              onChange={handleChange}
-              required
-            />
-
-            <input
-              type="number"
-              name="weight"
-              placeholder="Weight (kg)"
-              onChange={handleChange}
-              required
-            />
-          </div>
-
-          <button type="submit" disabled={loading}>
-            {loading ? "Processing..." : "Book Now"}
-          </button>
-        </form>
-      </div>
-    </div>
-  );
+                {/* Step 4: Cost */}
+                <div className="step-card">
+                    <div className="step-badge">4</div>
+                    <button className="calc-btn" onClick={handleCalculate} disabled={loading}>
+                        {loading ? "Calculating..." : "Calculate Estimate"}
+                    </button>
+                    {fareData && (
+                        <div className="fare-box">
+                            <h1>₹{fareData.fare}</h1>
+                            <p>Distance: {fareData.distance} | {selectedVehicle}</p>
+                            <button className="confirm-btn" onClick={handleConfirm}>Confirm Booking</button>
+                        </div>
+                    )}
+                </div>
+            </div>
+        </div>
+    );
 };
 
 export default BookingForm;

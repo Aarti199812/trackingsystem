@@ -204,12 +204,9 @@
 .hero-text {
     position: absolute;
     top: 30%;
-    left: -300px; /* start outside */
+    left: 200px; /* start outside */
     transform: translateY(-50%);
     color: white;
     z-index: 3;
     transition: all 3s ease-out;
-}
-.text-animate {
-    left: 10%; 
 }

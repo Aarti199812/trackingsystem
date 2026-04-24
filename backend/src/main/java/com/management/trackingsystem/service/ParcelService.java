@@ -93,4 +93,14 @@ public class ParcelService {
 
         return parcelRepository.save(parcel);
     }
+    public Parcel getParcelById(long id) {
+        return parcelRepository.findById(id)
+                .orElse(null);
+    }   
+    public Parcel saveParcel(Parcel parcel) {
+        return parcelRepository.save(parcel);
+    }   
+    public List<Parcel> getParcelsByUsserId(Long userId){
+        return parcelRepository.findByUserId(userId);
+    }
 }
