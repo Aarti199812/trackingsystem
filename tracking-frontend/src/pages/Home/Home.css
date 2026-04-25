@@ -226,19 +226,12 @@
 .hero-text {
     position: absolute;
     top: 30%;
-<<<<<<< HEAD
-    left: 100px; /* start outside */
-=======
+
+    /* left: 100px; start outside */
+
     left: 200px; /* start outside */
->>>>>>> origin/aarti-branch
     transform: translateY(-50%);
     color: white;
     z-index: 3;
     transition: all 3s ease-out;
 }
-<<<<<<< HEAD
-/* .text-animate {
-    left: 10%; 
-} */
-=======
->>>>>>> origin/aarti-branch

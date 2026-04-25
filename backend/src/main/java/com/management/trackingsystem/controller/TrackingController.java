@@ -1,5 +1,6 @@
 package com.management.trackingsystem.controller;
 
+import com.management.trackingsystem.dto.ParcelRequest;
 import com.management.trackingsystem.model.Parcel;
 import com.management.trackingsystem.repository.ParcelRepository;
 import com.management.trackingsystem.model.User;
@@ -35,24 +36,47 @@ public class TrackingController {
     private UserRepository userRepository;
 
     @PostMapping("/confirm")
-    public ResponseEntity<?> confirmParcel(@RequestBody Parcel parcel){
-        try{
-            if (parcel.getUser()!= null && parcel.getUser().getId()!=null){
-                System.out.println("user id" +parcel.getUser().getId());
-                User existingUser = userRepository.findById(parcel.getUser().getId())
-                .orElseThrow(() -> new RuntimeException("User not found"));
-                parcel.setUser(existingUser);
-                System.out.println("null request");
+    public ResponseEntity<?> confirmParcel(@RequestBody ParcelRequest request) {
+        try {
+
+            // 🔥 CHECK userId
+            if (request.getUserId() == null) {
+                return ResponseEntity.badRequest().body("UserId is missing!");
             }
+
+            // 🔹 Fetch user from DB
+            User user = userRepository.findById(request.getUserId())
+                    .orElseThrow(() -> new RuntimeException("User not found"));
+
+            // 🔹 Create Parcel entity
+            Parcel parcel = new Parcel();
+
+            parcel.setTrackingId(request.getTrackingId());
+            parcel.setSenderName(request.getSenderName());
+            parcel.setRecipientName(request.getRecipientName());
+            parcel.setSenderPhone(request.getSenderPhone());
+            parcel.setRecipientPhone(request.getRecipientPhone());
+            parcel.setSourceAddress(request.getSourceAddress());
+            parcel.setDestinationAddress(request.getDestinationAddress());
+            parcel.setWeight(request.getWeight());
+            parcel.setDistanceKm(request.getDistanceKm());
+            parcel.setTotalPrice(request.getTotalPrice());
+            parcel.setVehicleType(request.getVehicleType());
+
+            // 🔥 IMPORTANT
             parcel.setStatus("Pending");
+            parcel.setUser(user);
+
+            // 🔹 Save
             Parcel savedParcel = parcelRepository.save(parcel);
-            return 
-             ResponseEntity.ok(savedParcel);
-    } catch(Exception e){
-        e.printStackTrace();
-        return ResponseEntity.status(500).body("Error:" + e.getMessage());
+
+            return ResponseEntity.ok(savedParcel);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body("Error: " + e.getMessage());
+        }
     }
-}
 
     TrackingController(ParcelRepository parcelRepository) {
         this.parcelRepository = parcelRepository;

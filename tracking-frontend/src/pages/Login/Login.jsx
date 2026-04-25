@@ -22,6 +22,7 @@ const Login = () => {
       const user = response.data;
 
       localStorage.setItem("user", JSON.stringify(user));
+      localStorage.setItem("userId", user.id);
 
       // Handle both ADMIN and admin
       if (user.role?.toLowerCase() === "admin") {
