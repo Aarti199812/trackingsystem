@@ -54,40 +54,21 @@ const BookingForm = () => {
         }
     };
         
-   const handleConfirm = async () => {
+    const handleConfirm = async () => {
     if (!fareData) {
         alert("Pehle Fare Calculate karein!");
         return;
     }
 
-    // 1. Local Storage se data nikalne ka sabse safe tarika
-    const storedUser = localStorage.getItem('user');
-    const storedUserId = localStorage.getItem('userId');
+    const userId = localStorage.getItem("userId");
+
+    if (!userId) {
+        alert("User not logged in!");
+        return;
+    }
     
-    let finalUserId = null;
-
-    if (storedUserId) {
-        finalUserId = storedUserId;
-    } else if (storedUser) {
-        const parsedUser = JSON.parse(storedUser);
-        finalUserId = parsedUser.id;
-    }
-
-    // Agar ID abhi bhi nahi mili toh error dikhao
-    if (!finalUserId) {
-        alert("Session expired! Please Login again.");
-        return;
-    }
-    if (!booking.recipientPhone|| booking.recipientPhone.trim()===""){
-        alert("recieved phone no required");
-        return;
-    }
-
-    const generatedTrackingId = "SP-" + Math.floor(100000 + Math.random() * 900000);
-
-    // 2. Payload Structure (Dhyan rakho: user object ke andar ID honi chahiye)
     const payload = {
-        trackingId: generatedTrackingId,
+        trackingId: "SP-" + Math.floor(100000 + Math.random() * 900000),
         senderName: booking.senderName,
         recipientName: booking.recipientName,
         sourceAddress: booking.pickupAddress,
@@ -99,12 +80,12 @@ const BookingForm = () => {
         distanceKm: parseFloat(fareData.distance.replace(/[^0-9.]/g, '')),
         senderPhone: booking.senderPhone,
         recipientPhone: booking.recipientPhone,
-        // Backend entity ki mandatory field
-        userId: Number(storedUserId) 
-        
+
+        // 🔥 FIXED LINE
+        userId: parseInt(userId)
     };
 
-    console.log("Final Payload checking before fetch:", payload);
+    console.log("FINAL PAYLOAD:", payload);
 
     try {
         const response = await fetch("http://localhost:9023/api/parcels/book", {
@@ -125,96 +106,172 @@ const BookingForm = () => {
         console.error("Connection Error:", err);
         alert("Server se connect nahi ho pa rha! Check Spring Boot.");
     }
-};
-       
-        
+    };
+
+
+           
     return (
-        <div className="booking-page">
-            <div className="form-container">
-                <div className="step-card">
-                    <div className="step-badge">1</div>
-                    <h3>Sender Details</h3>
-                    <div className="input-grid">
-                        <div className="input-field">
-                            <label>SENDER NAME *</label>
-                            <input type="text" value={booking.senderName} onChange={(e) => setBooking({...booking, senderName: e.target.value})} />
-                        </div>
-                        <div className="input-field">
-                            <label>MOBILE *</label>
-                            <input type="text" value={booking.senderPhone} onChange={(e) => setBooking({...booking, senderPhone: e.target.value})} />
-                        </div>
-                        <div className="input-field full">
-                            <label>PICKUP ADDRESS *</label>
-                            <input type="text" placeholder="Street / Area" onChange={(e) => setBooking({...booking, pickupAddress: e.target.value})} />
-                        </div>
-                        <div className="input-field">
-                            <label>FROM CITY *</label>
-                            <select value={booking.fromCity} onChange={(e) => setBooking({...booking, fromCity: e.target.value})}>
-                                <option value="">Select City</option>
-                                {cities.map(c => <option key={c} value={c}>{c}</option>)}
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="step-card">
-                    <div className="step-badge">2</div>
-                    <h3>Receiver Details</h3>
-                    <div className="input-grid">
-                        <div className="input-field">
-                            <label>RECEIVER NAME *</label>
-                            <input type="text" placeholder="Full Name" onChange={(e) => setBooking({...booking, recipientName: e.target.value})} />
-                        </div>
-                        <div className="input-field">
-                            <label>MOBILE *</label>
-                            <input type="text" placeholder="Mobile No" value= {booking.recipientPhone || ""} onChange={(e) => setBooking({...booking, recipientPhone: e.target.value})} />
-                        </div>
-                        <div className="input-field full">
-                            <label>DROP ADDRESS *</label>
-                            <input type="text" placeholder="Delivery Address" onChange={(e) => setBooking({...booking, dropAddress: e.target.value})} />
-                        </div>
-                        <div className="input-field">
-                            <label>TO CITY *</label>
-                            <select value={booking.toCity} onChange={(e) => setBooking({...booking, toCity: e.target.value})}>
-                                <option value="">Select City</option>
-                                {cities.map(c => <option key={c} value={c}>{c}</option>)}
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="step-card">
-                    <div className="step-badge">3</div>
-                    <h3>Weight & Vehicle</h3>
-                    <div className="weight-section">
-                        <h2>{weight} kg</h2>
-                        <input type="range" min="1" max="500" value={weight} onChange={(e) => setWeight(e.target.value)} />
-                    </div>
-                    <div className="vehicle-grid">
-                        {vehicles.map(v => (
-                            <div key={v.name} className={`v-card ${selectedVehicle === v.name ? "active" : ""}`} onClick={() => setSelectedVehicle(v.name)}><img src={v.img} alt={v.name} style={{width:'40px'}}/>
-                                <h4>{v.name}</h4>
-                                <span>{v.cap}</span>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-
-                <div className="step-card">
-                    <div className="step-badge">4</div>
-                    <button className="calc-btn" onClick={handleCalculate} disabled={loading}>
-                        {loading ? "Calculating..." : "Calculate Estimate"}
-                    </button>
-                    {fareData && (
-                        <div className="fare-box">
-                            <h1>₹{fareData.fare}</h1>
-                            <p>Distance: {fareData.distance} | {selectedVehicle}</p>
-                            <button className="confirm-btn" onClick={handleConfirm}>Confirm & Pay</button>
-                        </div>
-                    )}
-                </div>
+      <div className="booking-page">
+        <div className="form-container">
+          {/* Step 1: Sender */}
+          <div className="step-card">
+            <div className="step-badge">1</div>
+            <h3>Sender Details</h3>
+            <div className="input-grid">
+              <div className="input-field">
+                <label>SENDER NAME *</label>
+                <input
+                  type="text"
+                  value={booking.senderName}
+                  onChange={(e) =>
+                    setBooking({ ...booking, senderName: e.target.value })
+                  }
+                />
+              </div>
+              <div className="input-field">
+                <label>MOBILE *</label>
+                <input
+                  type="text"
+                  value={booking.senderPhone}
+                  onChange={(e) =>
+                    setBooking({ ...booking, senderPhone: e.target.value })
+                  }
+                />
+              </div>
+              <div className="input-field full">
+                <label>PICKUP ADDRESS *</label>
+                <input
+                  type="text"
+                  placeholder="Street / Area"
+                  onChange={(e) =>
+                    setBooking({ ...booking, pickupAddress: e.target.value })
+                  }
+                />
+              </div>
+              <div className="input-field">
+                <label>FROM CITY *</label>
+                <select
+                  onChange={(e) =>
+                    setBooking({ ...booking, fromCity: e.target.value })
+                  }
+                >
+                  <option value="">Select City</option>
+                  {cities.map((c) => (
+                    <option key={c} value={c}>
+                      {c}
+                    </option>
+                  ))}
+                </select>
+              </div>
             </div>
+          </div>
+          {/* Step 2: Receiver */}
+          <div className="step-card">
+            <div className="step-badge">2</div>
+            <h3>Receiver Details</h3>
+            <div className="input-grid">
+              <div className="input-field">
+                <label>RECEIVER NAME *</label>
+                <input
+                  type="text"
+                  placeholder="Full Name"
+                  onChange={(e) =>
+                    setBooking({ ...booking, recipientName: e.target.value })
+                  }
+                />
+              </div>
+              <div className="input-field">
+                <label>MOBILE *</label>
+                <input
+                  type="text"
+                  placeholder="Mobile No"
+                  onChange={(e) =>
+                    setBooking({ ...booking, recipientPhone: e.target.value })
+                  }
+                />
+              </div>
+              <div className="input-field full">
+                <label>DROP ADDRESS *</label>
+                <input
+                  type="text"
+                  placeholder="Delivery Address"
+                  onChange={(e) =>
+                    setBooking({ ...booking, dropAddress: e.target.value })
+                  }
+                />
+              </div>
+              <div className="input-field">
+                <label>TO CITY *</label>
+                <select
+                  onChange={(e) =>
+                    setBooking({ ...booking, toCity: e.target.value })
+                  }
+                >
+                  <option value="">Select City</option>
+                  {cities.map((c) => (
+                    <option key={c} value={c}>
+                      {c}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+          </div>
+
+          {/* Step 3: Weight & Vehicle */}
+          <div className="step-card">
+            <div className="step-badge">3</div>
+            <h3>Weight & Vehicle</h3>
+            <div className="weight-section">
+              <h2>{weight} kg</h2>
+              <input
+                type="range"
+                min="1"
+                max="500"
+                value={weight}
+                onChange={(e) => setWeight(e.target.value)}
+              />
+            </div>
+            <div className="vehicle-grid">
+              {vehicles.map((v) => (
+                <div
+                  key={v.name}
+                  className={`v-card ${selectedVehicle === v.name ? "active" : ""}`}
+                  onClick={() => setSelectedVehicle(v.name)}
+                >
+                  <img src={v.img} alt={v.name} style={{ width: "40px" }} />
+                  <h4>{v.name}</h4>
+                  <span>{v.cap}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Step 4: Cost */}
+          <div className="step-card">
+            <div className="step-badge">4</div>
+            <button
+              className="calc-btn"
+              onClick={handleCalculate}
+              disabled={loading}
+            >
+              {loading ? "Calculating..." : "Calculate Estimate"}
+            </button>
+            {fareData && (
+              <div className="fare-box">
+                <h1>₹{fareData.fare}</h1>
+                <p>
+                  Distance: {fareData.distance} | {selectedVehicle}
+                </p>
+                
+                <button className="confirm-btn" onClick={handleConfirm}>
+                  Confirm Booking
+                </button>
+              </div>
+            )}
+          </div>
         </div>
+      </div>
     );
 };
 

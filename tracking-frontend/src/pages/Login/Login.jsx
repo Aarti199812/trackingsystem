@@ -22,22 +22,7 @@ const Login = () => {
       const user = response.data;
 
       localStorage.setItem("user", JSON.stringify(user));
-       
-      const userId =user.id || user.userId 
-       if(userId){
-        localStorage.setItem("userId", userId);
-       }else{
-        console.error("user id not found");
-       }
-
-       if(user.fullName){
-        localStorage.setItem("userName", user.fullName);
-       }
-       
-       if(user.phone){
-        localStorage.setItem("userPhone", user.phone);
-       }
-
+      localStorage.setItem("userId", user.id);
 
       // Handle both ADMIN and admin
       if (user.role?.toLowerCase() === "admin") {
