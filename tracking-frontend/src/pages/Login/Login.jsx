@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
@@ -49,6 +48,7 @@ const Login = () => {
       
 
         <h2>SafeParcel Login</h2>
+        <p>Login to access your SafeParcel account</p>
 
         <form onSubmit={handleLogin}>
           <input

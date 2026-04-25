@@ -103,8 +103,7 @@ const AdminDashboard = () => {
                                 <th>From - To</th>
                                 <th>Vehicle</th>
                                 <th>Status</th>
-                                <th>Action</th>
-                            </tr>
+                                <th>Action</th></tr>
                         </thead>
                         <tbody>
                             {allBookings.map((booking) => (
