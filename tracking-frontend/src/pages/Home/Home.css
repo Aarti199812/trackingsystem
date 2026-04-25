@@ -60,7 +60,7 @@
     
     font-weight: 800;
     line-height: 1.2;
-    margin: 0;
+    margin: 150px;
     text-align: left;
 }
 
@@ -82,7 +82,7 @@
 .white-card {
     background: white;
     border-radius: 12px;
-    margin-top: 150px;
+   
     position: relative;
     z-index: 10;
     padding: 25px 40px;
