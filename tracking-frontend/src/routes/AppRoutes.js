@@ -54,7 +54,7 @@ const AppRoutes = () => {
       <Route path="/book-truck" element={<TruckBookingPage />} />  
       <Route path="/book-bike" element={<BikePage />} /> 
       <Route path="/book-movers" element={<PackerPage />} />
-      <Route path="/payment" element={<PackerPage/>}/>
+      <Route path="/payment" element={<PaymentPage />} />
 
       {/* 4. 404 FALLBACK */}
       <Route path="*" element={<div style={{padding: '100px', textAlign: 'center'}}><h2>Page Not Found</h2><Link to="/">Back to Home</Link></div>} />

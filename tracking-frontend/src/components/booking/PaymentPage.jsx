@@ -1,109 +1,129 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
-import { CreditCard, CheckCircle, ShieldCheck } from 'lucide-react';
+import { CreditCard, ShieldCheck } from 'lucide-react';
 import './PaymentPage.css';
 
 const PaymentPage = () => {
     const location = useLocation();
     const navigate = useNavigate();
-    const [parcel, setParcel] = useState(null);
+    const [parcelData, setParcelData] = useState(null);
     const [loading, setLoading] = useState(true);
 
     const queryParams = new URLSearchParams(location.search);
     const trackingId = queryParams.get('id');
 
     useEffect(() => {
-        const fetchData = async () => {
+        // Force load Razorpay Script
+        const script = document.createElement("script");
+        script.src = "https://razorpay.com";
+        script.async = true;
+        document.body.appendChild(script);
+
+        const fetchParcel = async () => {
             try {
-                // Backend se parcel ki details fetch karna calculations ke liye
+                // Tracking ID se data fetch karna
                 const res = await axios.get(`http://localhost:9023/api/parcels/track/${trackingId}`);
-                setParcel(res.data);
+                setParcelData(res.data);
             } catch (err) {
-                console.error("Fetch error", err);
+                console.error("Fetch Error:", err);
             } finally {
                 setLoading(false);
             }
         };
-        if (trackingId) fetchData();
+        if (trackingId) fetchParcel();
     }, [trackingId]);
 
-    if (loading) return <div className="loader">Calculating Bill...</div>;
-
-    // Real Calculations
-    const baseFare = parcel?.totalPrice || 0;
-    const gst = baseFare * 0.18; // 18% GST
-    const platformFee = 5.00;
-    const totalPayable = baseFare + gst + platformFee;
-
-    const handleDummyPayment = async () => {
-        try {
-            // Real Project Logic: Database mein status update karna
-            await axios.put(`http://localhost:9023/api/parcels/update-status/${parcel.id}`, {
-                status: "PAID_SUCCESSFULLY"
-            });
-            alert("Payment Successful! Your order is being processed.");
-            navigate('/user-dashboard');
-        } catch (err) {
-            alert("Payment Failed: Server Error");
+    const handlePayment = () => {
+        if (!window.Razorpay) {
+            alert("Razorpay is loading... Please wait a moment.");
+            return;
         }
+
+        // Calculations
+        const base = parcelData?.totalPrice || 0;
+        const totalAmount = base + (base * 0.18) + 5;
+
+        const options = {
+            key: "rzp_test_Sibpa6BSWYy6eZ", // <--- AAPKI NEW KEY ID
+            amount: Math.round(totalAmount * 100), // Paise mein
+            currency: "INR",
+            name: "SafeParcel Logistics",
+            description: `Payment for Order ${trackingId}`,
+            image: "https://your-logo-url.com",
+            handler: async function (response) {
+                try {
+                    // Success hone par status update
+                    await axios.put(`http://localhost:9023/api/parcels/update-status/${parcelData.id}`, {
+                        status: "PAID_SUCCESSFULLY"
+                    });
+                    alert("Payment Successful! ID: " + response.razorpay_payment_id);
+                    navigate("/user-dashboard");
+                } catch (err) {
+                    alert("Payment Success but Database update failed.");
+                }
+            },
+            prefill: {
+                name: parcelData?.senderName || "User",
+                contact: parcelData?.senderPhone || "9999999999"
+            },
+            theme: { color: "#1a237e" }
+        };
+
+        const rzp = new window.Razorpay(options);
+        rzp.open();
     };
+
+    if (loading) return <div className="loader">Verifying Order Details...</div>;
 
     return (
         <div className="payment-page-container">
-            {/* Header Navigation jaisa image mein tha */}
-            <nav className="payment-nav">
-                <Link to="/">Home</Link>
-                <Link to="/book">Book Parcel</Link>
-                <span className="nav-active">Payment</span>
-            </nav>
-
             <div className="payment-content">
                 <div className="payment-main-card">
                     <div className="payment-header-info">
                         <div className="brand-logo">SP</div>
                         <div>
                             <h3>SafeParcel Logistics</h3>
-                            <p>Order ID: {parcel?.trackingId}</p>
+                            <p>Order ID: {trackingId}</p>
                         </div>
                     </div>
 
                     <div className="price-summary-box">
                         <div className="price-row">
                             <span>Base Amount</span>
-                            <span>₹{baseFare.toFixed(2)}</span>
+                            <span>₹{parcelData?.totalPrice.toFixed(2)}</span>
                         </div>
                         <div className="price-row">
                             <span>GST (18%)</span>
-                            <span>₹{gst.toFixed(2)}</span>
+                            <span>₹{(parcelData?.totalPrice * 0.18).toFixed(2)}</span>
                         </div>
                         <div className="price-row">
                             <span>Platform Fee</span>
-                            <span>₹{platformFee.toFixed(2)}</span>
+                            <span>₹5.00</span>
                         </div>
                         <hr />
                         <div className="price-row total-row">
                             <span>Total Payable</span>
-                            <span>₹{totalPayable.toFixed(2)}</span>
+                            <span>₹{(parcelData?.totalPrice * 1.18 + 5).toFixed(2)}</span>
                         </div>
                     </div>
 
                     <div className="payment-methods-section">
                         <p className="section-title">CHOOSE PAYMENT METHOD</p>
+                        {/* Hamesha select dikhane ke liye active class */}
                         <div className="method-item active">
                             <CreditCard size={20} />
                             <span>Cards (Visa, Mastercard, RuPay)</span>
                         </div>
-                        <div className="method-item disabled">
-                            <span>Netbanking / UPI (Coming Soon)</span>
-                        </div>
-                    </div><button className="pay-now-btn" onClick={handleDummyPayment}>
-                        Pay ₹{totalPayable.toFixed(0)}
+                    </div>
+
+                    <button className="pay-now-btn" onClick={handlePayment}>
+                        Pay Now
                     </button>
 
                     <div className="secure-footer">
                         <ShieldCheck size={14} color="green" />
-                        <span>Secure SSL Encryption | Powered by Razorpay (Test)</span>
+                        <span>Secure SSL Powered by Razorpay (Test Mode)</span>
                     </div>
                 </div>
             </div>

@@ -68,5 +68,15 @@ public class ParcelController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+    @GetMapping("/track/{trackingId}")
+    public ResponseEntity<?> getParcelByTrackingId(@PathVariable String trackingId) {
+    try {
+        Parcel parcel = parcelService.getParcelByTrackingId(trackingId);
+        return ResponseEntity.ok(parcel);
+    } catch (Exception e) {
+        return ResponseEntity.status(404).body(e.getMessage());
+    }
+}
+
     
 }

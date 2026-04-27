@@ -100,7 +100,14 @@ public class ParcelService {
     public Parcel saveParcel(Parcel parcel) {
         return parcelRepository.save(parcel);
     }   
-    public List<Parcel> getParcelsByUsserId(Long userId){
+    public List<Parcel> getParcelsByUserId(Long userId){
         return parcelRepository.findByUserId(userId);
     }
+    
+    public Parcel getParcelByTrackingId(String trackingId) {
+    return parcelRepository.findByTrackingId(trackingId)
+    .orElseThrow(() -> new RuntimeException("Parcel not found with Tracking ID: " + trackingId));
+}
+
+    
 }
