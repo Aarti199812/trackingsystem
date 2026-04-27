@@ -88,7 +88,7 @@ const BookingForm = () => {
     console.log("FINAL PAYLOAD:", payload);
 
     try {
-        const response = await fetch("http://localhost:9023/api/parcels/book", {
+        const response = await fetch("http://localhost:9023/api/tracking/confirm", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(payload) // Make sure JSON is CAPITAL
@@ -96,7 +96,7 @@ const BookingForm = () => {
 
         if (response.ok) {
             // SUCCESS: Redirect to Payment Page
-            navigate(`/payment?id=${generatedTrackingId}`);
+            navigate(`/payment?id=${payload.trackingId}`);
         } else {
             const errorMsg = await response.text();
             console.error("Backend Error:", errorMsg);
@@ -185,6 +185,8 @@ const BookingForm = () => {
                 <input
                   type="text"
                   placeholder="Mobile No"
+                  value={booking.recipientPhone}
+                  required
                   onChange={(e) =>
                     setBooking({ ...booking, recipientPhone: e.target.value })
                   }
