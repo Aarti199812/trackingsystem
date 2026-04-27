@@ -12,7 +12,7 @@ import TruckBookingPage from '../components/vehiclePage/TruckBookingPage';
 import PackerPage from '../components/vehiclePage/PackerPage';
 import BikePage from '../components/vehiclePage/BikePage';
 import BookingForm from '../components/booking/BookingForm';
-
+import PaymentPage from '../components/booking/PaymentPage';
 // Simple Protected Route Logic
 const ProtectedRoute = ({ children }) => {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -54,6 +54,7 @@ const AppRoutes = () => {
       <Route path="/book-truck" element={<TruckBookingPage />} />  
       <Route path="/book-bike" element={<BikePage />} /> 
       <Route path="/book-movers" element={<PackerPage />} />
+      <Route path="/payment" element={<PackerPage/>}/>
 
       {/* 4. 404 FALLBACK */}
       <Route path="*" element={<div style={{padding: '100px', textAlign: 'center'}}><h2>Page Not Found</h2><Link to="/">Back to Home</Link></div>} />

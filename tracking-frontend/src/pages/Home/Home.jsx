@@ -9,9 +9,9 @@ const Home = () => {
     const navigate = useNavigate(); 
 
     const categories = [
-        { id: 'truck', label: 'Truck', icon: '/assets/image3.png', path: '/book-truck' },
-        { id: 'bike', label: 'Two Wheeler', icon: '/assets/image1.png', path: '/book-bike' },
-        { id: 'movers', label: 'Packers & Movers', icon: '/assets/image4.png', path: '/book-movers' },
+        { id: 'truck', label: 'Truck', icon: '/assests/image3.png', path: '/book-truck' },
+        { id: 'bike', label: 'Two Wheeler', icon: '/assests/image1.png', path: '/book-bike' },
+        { id: 'movers', label: 'Packers & Movers', icon: '/assests/image4.png', path: '/book-movers' },
     ];
 
     useEffect(() => {

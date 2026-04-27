@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // Redirection ke liye
 import './BookingForm.css';
 
 const BookingForm = () => {
+    const navigate = useNavigate(); // Navigation hook
     
     const savedName = localStorage.getItem('userName') || "";
     const savedPhone = localStorage.getItem('userPhone') || "";
@@ -24,7 +26,7 @@ const BookingForm = () => {
     const [loading, setLoading] = useState(false);
 
     const vehicles = [
-        { name: '3 Wheeler', cap: '500kg', type: '3wheeler', img: 'https://nest-platform-assets.porter.in/3_wheeler_d873d6117b.svg' },
+        { name: '3 Wheeler', cap: '500kg', type: 'bike', img: 'https://nest-platform-assets.porter.in/3_wheeler_d873d6117b.svg' },
         { name: 'Tata Ace', cap: '750kg', type: 'tataace', img: 'https://nest-platform-assets.porter.in/tata_ace_190014022a.svg' },
         { name: 'Pickup 8ft', cap: '1.2 Ton', type: 'pickup8ft', img: 'https://nest-platform-assets.porter.in/pickup_8ft_7d781b29d9.svg' },
         { name: 'Medium Truck', cap: '3 Ton', type: 'mediumtruck', img: 'https://nest-platform-assets.porter.in/truck_14ft_9731295982.svg' }
@@ -42,7 +44,7 @@ const BookingForm = () => {
             const vType = vehicles.find(v => v.name === selectedVehicle).type;
             const res = await fetch(`http://localhost:9023/api/tracking/get-fare?from=${booking.fromCity}&to=${booking.toCity}&vehicleType=${vType}&weight=${weight}`);
 
-            if (!res.ok) throw new Error("backend error")
+            if (!res.ok) throw new Error("backend error");
             const data = await res.json();
             setFareData(data);
         } catch (err) {
@@ -54,7 +56,7 @@ const BookingForm = () => {
         
     const handleConfirm = async () => {
     if (!fareData) {
-        alert("Calculate fare!");
+        alert("Pehle Fare Calculate karein!");
         return;
     }
 
@@ -72,7 +74,7 @@ const BookingForm = () => {
         sourceAddress: booking.pickupAddress,
         destinationAddress: booking.dropAddress,
         weight: parseFloat(weight),
-        status: "Pending",
+        status: "Awaiting Payment",
         vehicleType: selectedVehicle,
         totalPrice: parseFloat(fareData.fare),
         distanceKm: parseFloat(fareData.distance.replace(/[^0-9.]/g, '')),
@@ -86,21 +88,23 @@ const BookingForm = () => {
     console.log("FINAL PAYLOAD:", payload);
 
     try {
-        const response = await fetch("http://localhost:9023/api/tracking/confirm", {
+        const response = await fetch("http://localhost:9023/api/parcels/book", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(payload)
+            body: JSON.stringify(payload) // Make sure JSON is CAPITAL
         });
 
         if (response.ok) {
-            alert("🎉 Success! Booking saved successfully.");
+            // SUCCESS: Redirect to Payment Page
+            navigate(`/payment?id=${generatedTrackingId}`);
         } else {
             const errorMsg = await response.text();
             console.error("Backend Error:", errorMsg);
-            alert("Error: " + errorMsg);
+            alert("Backend Error: " + errorMsg);
         }
     } catch (err) {
-        alert("Server not connected !");
+        console.error("Connection Error:", err);
+        alert("Server se connect nahi ho pa rha! Check Spring Boot.");
     }
     };
 
