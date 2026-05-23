@@ -19,13 +19,9 @@ public class ParcelController {
     @Autowired
     private ParcelService parcelService;
 
-    
     @PostMapping("/book")
     public ResponseEntity<?> bookParcel(@RequestBody ParcelRequest request) {
         try {
-            if (request.getUserId() == null) {
-                return ResponseEntity.badRequest().body("Error: User ID missing!");
-            }
             Parcel parcel = parcelService.bookParcel(request);
             return ResponseEntity.ok(parcel);
         } catch (Exception e) {
@@ -34,20 +30,21 @@ public class ParcelController {
         }
     }
 
-    @GetMapping("/user/{userId}")
-    public ResponseEntity<?> getParcelsByUserId(@PathVariable Long userId) {
+    @GetMapping("/user")
+    public ResponseEntity<?> getParcelsByUserEmail(@RequestParam String email) {
         try {
+        
             List<Parcel> userParcels = parcelService.getAllParcels()
                 .stream()
-                .filter(p -> p.getUser() != null && p.getUser().getId().equals(userId))
+                .filter(p -> p.getUser() != null && email.equalsIgnoreCase(p.getUser().getEmail()))
                 .collect(Collectors.toList());
+                
             return ResponseEntity.ok(userParcels);
         } catch (Exception e) {
             return ResponseEntity.status(500).body("Error fetching user data: " + e.getMessage());
         }
     }
 
-    
     @GetMapping("/all")
     public ResponseEntity<?> getAllParcels() {
         try {
@@ -57,7 +54,6 @@ public class ParcelController {
         }
     }
 
-    
     @PutMapping("/update-status/{id}")
     public ResponseEntity<?> updateStatus(@PathVariable long id, @RequestBody Map<String, String> statusUpdate) {
         try {
@@ -68,15 +64,14 @@ public class ParcelController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
     @GetMapping("/track/{trackingId}")
     public ResponseEntity<?> getParcelByTrackingId(@PathVariable String trackingId) {
-    try {
-        Parcel parcel = parcelService.getParcelByTrackingId(trackingId);
-        return ResponseEntity.ok(parcel);
-    } catch (Exception e) {
-        return ResponseEntity.status(404).body(e.getMessage());
+        try {
+            Parcel parcel = parcelService.getParcelByTrackingId(trackingId);
+            return ResponseEntity.ok(parcel);
+        } catch (Exception e) {
+            return ResponseEntity.status(404).body(e.getMessage());
+        }
     }
-}
-
-    
 }

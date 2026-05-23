@@ -61,7 +61,7 @@
     width: 90%;
     max-width: 1100px;
     position: absolute;
-    bottom: -50px;
+    bottom: -5px;
     box-shadow: 0 20px 40px rgba(0,0,0,0.15);
 }
 
@@ -87,7 +87,13 @@
 .vehicle-selection-area { margin-top: 120px; padding: 0 5%; text-align: center; }
 .section-title { margin-bottom: 40px; font-size: 2rem; }
 
-.vehicle-cards-flex { display: flex; flex-wrap: wrap; justify-content: center; gap: 30px; }
+.vehicle-cards-flex {
+     display: flex; 
+     flex-wrap: wrap; 
+     justify-content: center; 
+     gap: 30px; 
+     margin-bottom: 30px;
+    }
 
 .truck-card {
     background: white;

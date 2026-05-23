@@ -47,7 +47,7 @@ const TrackingSection = () => {
         <form onSubmit={handleTrack} className="search-box">
           <input
             type="text"
-            placeholder="e.g. PRT-XXXXXX"
+            placeholder="e.g. SP-XXXXXX"
             value={trackingId}
             onChange={(e) => setTrackingId(e.target.value)}
           />

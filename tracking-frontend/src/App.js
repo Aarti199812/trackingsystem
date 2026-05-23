@@ -16,14 +16,6 @@ function App() {
     <div className="App">
       <Navbar />
 
-      {showHeader && (
-        <header className="app-header">
-          <h1 style={{ textAlign: 'center', margin: '20px', color: '#1d4ed8' }}>
-            SafeParcel Management System
-          </h1>
-        </header>
-      )}
-
       <main className="container">
         {/* Saare pages yahan load honge */}
         <AppRoutes />

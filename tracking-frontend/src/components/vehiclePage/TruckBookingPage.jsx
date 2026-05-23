@@ -105,7 +105,7 @@ const TruckBookingPage = () => {
               <img src={v.img} alt={v.name} />
               <h4>{v.name}</h4>
               <p>Starts at <strong>{v.price}</strong></p>
-              <button className="select-truck-btn">Select Vehicle</button>
+            
             </div>
           ))}
         </div>

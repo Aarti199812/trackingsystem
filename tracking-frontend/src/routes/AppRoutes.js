@@ -13,6 +13,7 @@ import PackerPage from '../components/vehiclePage/PackerPage';
 import BikePage from '../components/vehiclePage/BikePage';
 import BookingForm from '../components/booking/BookingForm';
 import PaymentPage from '../components/booking/PaymentPage';
+import DriverPartner from '../pages/DriverPartner';
 // Simple Protected Route Logic
 const ProtectedRoute = ({ children }) => {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -43,7 +44,7 @@ const AppRoutes = () => {
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/track" element={<TrackingSection />} />
-      
+      <Route path="/driver-partner" element={<DriverPartner />} />
       {/* 2. PROTECTED ROUTES (Sirf Login par dikhenge) */}
       <Route path="/book" element={<ProtectedRoute><BookingForm /></ProtectedRoute>} />
       <Route path="/user-dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />

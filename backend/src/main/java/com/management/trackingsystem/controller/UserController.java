@@ -17,6 +17,16 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
+    @GetMapping("/all")
+    public ResponseEntity<?> getAllUsers() {
+        try {
+            java.util.List<User> users = userRepository.findAll();
+            return ResponseEntity.ok(users);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Error fetching users: " + e.getMessage());
+        }
+    }
+
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@RequestBody User loginData) {
 

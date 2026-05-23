@@ -21,33 +21,46 @@ const Login = () => {
 
       const user = response.data;
 
+      // 1. User data save karo
       localStorage.setItem("user", JSON.stringify(user));
       localStorage.setItem("userId", user.id);
 
-      // Handle both ADMIN and admin
+      window.dispatchEvent(new Event("storage"));
+
+      // 3. Role based redirect
       if (user.role?.toLowerCase() === "admin") {
         navigate("/admin-dashboard");
       } else {
         navigate("/user-dashboard");
       }
 
-    } catch (error) {
-      console.log("ERROR:", error);
-
-      if (error.response) {
-        setError(error.response.data);
+    } catch (xhrError) {
+      console.log("ERROR:", xhrError);
+      
+      if (xhrError.response && xhrError.response.data) {
+        // Safe Extraction: Store the raw data object or string directly
+        setError(xhrError.response.data);
       } else {
         setError("Network error. Please try again later.");
       }
     }
   };
 
+  // Helper function to safely read error text in JSX
+  const renderErrorMessage = () => {
+    if (!error) return null;
+    
+    // If the error state somehow became an object, extract text safely
+    if (typeof error === "object") {
+      return error.message || error.error || "Internal Server Error (500)";
+    }
+    
+    return error;
+  };
+
   return (
     <div className="login-container">
       <div className="login-card">
-
-      
-
         <h2>SafeParcel Login</h2>
         <p>Login to access your SafeParcel account</p>
 
@@ -59,7 +72,6 @@ const Login = () => {
             onChange={(e) => setEmail(e.target.value)}
             required
           />
-
           <input
             type="password"
             placeholder="Password"
@@ -67,18 +79,18 @@ const Login = () => {
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-
-          {error && <p className="error">{error}</p>}
-
+          
+          {/* SAFE RENDER: Calls our helper function to guarantee a primitive string output */}
+          {error && <p className="error">{renderErrorMessage()}</p>}
+          
           <button type="submit">Login</button>
         </form>
         <p className="register-link">
-          Don't have an account?{" "}
-          <Link to="/register">Sign Up</Link>
+          Don't have an account? <Link to="/register">Sign Up</Link>
         </p>
-
       </div>
     </div>
   );
 };
+
 export default Login;

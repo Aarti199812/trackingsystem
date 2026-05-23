@@ -1,0 +1,358 @@
+/* ==========================================
+   1. GLOBAL & WRAPPER STYLES
+   ========================================== */
+.dp-page-wrapper {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* ==========================================
+   2. HERO SECTION
+   ========================================== */
+.dp-hero-container {
+    position: relative;
+    width: 100%;
+    min-height: 480px; 
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    box-sizing: border-box;
+    padding-bottom: 35px; 
+}
+
+.dp-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0.1) 100%);
+    z-index: 1;
+}
+
+.dp-content-layer {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end; 
+    padding: 0 40px;
+    box-sizing: border-box;
+}
+
+.dp-text-block {
+    max-width: 520px;
+    text-align: left !important; 
+    margin-bottom: 1px;
+    margin-left: 10px;
+}
+
+.dp-main-heading {
+    font-size: 42px; 
+    font-weight: 800;
+    color: #3b0764; 
+    margin-bottom: auto;
+    line-height: 1.2;
+    text-align: left !important; 
+}
+
+.dp-sub-heading {
+    font-size: 17px;
+    color: #1e293b;
+    line-height: 1.5;
+    margin: 0;
+    font-weight: 500;
+    text-align: left !important; 
+}
+
+/* ==========================================
+   3. REGISTRATION FORM CARD
+   ========================================== */
+.dp-form-card {
+    width: 360px;
+    background-color: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 25px 25px rgba(0, 0, 0, 0.12);
+    padding: 24px;
+    box-sizing: border-box;
+    margin-top: 25px;
+    margin-right: -165px;
+}
+
+.dp-form-title {
+    text-align: center;
+    font-size: 15px;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0 0 20px 0;
+    text-transform: none;
+}
+
+.dp-form-element {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.dp-form-element input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 4px;
+    font-size: 14px;
+    box-sizing: border-box;
+    outline: none;
+}
+
+.dp-form-row {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+}
+
+.dp-form-row select {
+    flex: 1;
+    padding: 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 4px;
+    font-size: 14px;
+    background-color: #ffffff;
+    color: #334155;
+    outline: none;
+}
+
+.dp-full-select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 4px;
+    font-size: 14px;
+    background-color: #ffffff;
+    color: #334155;
+    outline: none;
+}
+
+.dp-submit-btn {
+    width: 100%;
+    padding: 14px;
+    background-color: #2563eb; 
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    letter-spacing: 0.5px;
+    margin-top: 6px;
+    transition: background-color 0.2s;
+}
+
+.dp-submit-btn:hover {
+    background-color: #1d4ed8;
+}
+
+.dp-download-footer {
+    margin-top: 20px;
+    text-align: center;
+    border-top: 1px solid #f1f5f9;
+    padding-top: 15px;
+}
+
+.dp-footer-bold {
+    font-size: 14px;
+    font-weight: 700;
+    color: #000000;
+    margin: 0 0 4px 0;
+}
+
+.dp-footer-light {
+    font-size: 12px;
+    color: #64748b;
+    display: block;
+    margin-bottom: 12px;
+}
+
+.dp-play-store {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #000000;
+    color: #ffffff;
+    text-decoration: none;
+    padding: 6px 18px;
+    border-radius: 5px;
+    gap: 10px;
+    width: 85%;
+    margin: 0 auto;
+    box-sizing: border-box;
+}
+
+.dp-play-icon {
+    font-size: 20px;
+    color: #22c55e;
+}
+
+.dp-play-text {
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+}
+
+.dp-play-text small {
+    font-size: 9px;
+    letter-spacing: 0.3px;
+    color: #94a3b8;
+}
+
+.dp-play-text strong {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+/* ==========================================
+   4. FEATURES / ADVANTAGE SECTION
+   ========================================== */
+.features-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 60px 20px; 
+}
+
+.feature-card {
+    flex: 1;
+    max-width: 300px;
+    text-align: center;
+    padding: 15px;
+}
+
+.feature-img {
+    width: 150px;
+    height: auto;
+    margin-bottom: 20px;
+}
+
+.feature-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 12px;
+}
+
+.feature-desc {
+    font-size: 0.95rem;
+    color: #666;
+    line-height: 1.6;
+}
+
+/* ==========================================
+   5. MAKING YOUR LIFE EASY (NEW DARK SECTION)
+   ========================================== */
+.dp-cta-section {
+    background-color: #0b0f19; 
+    color: #ffffff;            
+    padding: 60px 20px;
+    text-align: center;        
+}
+
+.cta-main-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+    margin-bottom: 40px;       
+    text-transform: uppercase;
+}
+
+.cta-content-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;       
+    max-width: 1100px;
+    margin: 0 auto;            
+    gap: 50px;                 
+}
+
+.cta-image-block {
+    flex: 1;
+    max-width: 500px;
+}
+
+.cta-img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;        
+    display: block;
+}
+
+.cta-text-block {
+    flex: 1;
+    max-width: 550px;
+    text-align: left;          
+}
+
+.cta-desc {
+    font-size: 0.95rem;
+    color: #e0e0e0;            
+    line-height: 1.7;          
+}
+
+/* ==========================================
+   6. RESPONSIVE MEDIA QUERIES
+   ========================================== */
+
+/* Tablet & Mobile Layout for Hero Section */
+@media (max-width: 950px) {
+    .dp-content-layer {
+        flex-direction: column;
+        gap: 34px;
+        padding: 40px 20px;
+        align-items: flex-start; 
+    }
+    .dp-text-block {
+        text-align: left !important;
+        max-width: 100%;
+        margin-left: 0;
+    }
+    .dp-main-heading {
+        font-size: 32px;
+        text-align: left !important;
+    }
+    .dp-sub-heading {
+        text-align: left !important;
+    }
+    .dp-hero-container {
+        height: auto;
+        min-height: initial;
+    }
+    .dp-form-card {
+        margin-right: 0;
+        width: 100%;
+        max-width: 400px;
+    }
+}
+
+/* Mobile Layout for Dark CTA Section */
+@media (max-width: 768px) {
+    .cta-content-wrapper {
+        flex-direction: column;
+        gap: 30px;
+    }
+    .cta-text-block {
+        text-align: center;    
+    }
+    .features-container {
+        flex-direction: column;
+        align-items: center;
+        gap: 40px;
+    }
+}
